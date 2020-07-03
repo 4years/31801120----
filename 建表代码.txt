@@ -1,0 +1,168 @@
+
+//商家信息表
+create table merchant_message (
+	merchant_id int(11) not null auto_increate,
+	merchant_name varchar(20) not null comment '商家名，不能重复',
+	merchant_rank int(11) not null comment '商家星级',
+	avg_consume double not null comment '人均消费',
+	total_sales int(20) not null comment '总销量',
+	PRIMARY key(merchant_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//满减方案表
+create table mermant_moneyOffWay (
+	moneyOff_id int(11) not null auto_increment,
+	moneyOff_much double not null comment '满减金额',
+	moneyOff_OffMuch double not null comment '优惠金额',
+	moneyOff_overlay int(11) not null comment '可否叠加，1可叠加，0不可叠加',
+	primary key(moneyOff_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//商品类别表
+create table merchant_goodskind (
+	kind_id int(11) not null auto_increment,
+	kind_name varchar(50) not null comment '分类栏目名',
+	good_num int(255) comment '商品数量’,
+	primary key(kind_id)
+) engine = INNODB default charset = utf8
+
+//商品详情表
+create table merchant_details (
+	goods_id int(11) not null auto_increment,
+	kind_id int(11) not null comment '所属分类编号',
+	goods_name varchar(50) not null comment '商品名',
+	goods_price double not null comment '价格',
+	goods_sales double not null comment '优惠价格',
+	PRIMARY key(goods_id),
+	foreign key(kind_id) references merchant_goodskind(kind_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//商品评价表
+create table goods_comment (
+	goods_id int(11) not null,
+	merchant_id int(11) not null comment '商家编号',
+	user_id int (11) not null comment '用户编号',
+	comment_message varchar(255) comment '评价内容',
+	rank int(11) comment '星级',
+	photo varchar(20) comment '照片',
+	foreign key(goods_id) references merchant_goodsDetails(goods_id),
+	foreign key(merchant_id) REFERENCES merchant_message(merchant_id),
+	foreign key(user_id) references user_message(user_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//骑手信息表
+create table knight_message (
+	knight_id int(11) not null auto_increment,
+	knight_name varchar(255) not null comment '骑手姓名',
+	hiredate datetime not null comment '入职日期',
+	knight_rank varchar(255) not null comment '骑手身份',
+	PRIMARY key (knight_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//骑手入账表
+create table knight_income (
+	knight_id int(11) not null,
+	order_id varchar(50) not null comment '订单编号',
+	order_time datetime not null comment '订单时间',
+	user_comment varchar(50) not null comment '用户评价',
+	income double not null comment '单笔收入',
+	foreign key(knight_id) references knight_message(knight_id)
+) engine = INNODB default charset = utf8
+
+//用户信息表
+create table user_message (
+	user_id int(11) not null auto_increment,
+	user_name varchar(50) not null comment '用户姓名',
+	user_sex varchar(11) comment '性别',
+	user_pwd varchar(255) not null comment '用户密码',
+	user_tel varchar(50) not null comment '电话',
+	user_email varchar(50) not null comment '邮箱',
+	user_city varchar(50) not null comment '所在城市',
+	user_regdate datetime not null comment '注册时间',
+	user_vip int(11) not null comment '判断是否为会员，0未非会员，1为会员',
+	user_vipDeadLine datetime comment '会员到期日',
+	PRIMARY key(user_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//优惠券持有表
+create table mermant_moneyOffHold (
+	user_id int(11) not null comment '用户编号',
+	coupon_id int(11) not null comment '优惠券编号',
+	merchant_id int(11) not null comment '所属商家编号',
+	moneyOff_much double not null comment '优惠金额',
+	number int(11) not null comment '数量',
+	sales_end_date datetime not null comment '截止日期',
+	foreign key(user_id) references user_message(user_id),
+	foreign key(coupon_id) references merchant_moneyOffMessage(coupon_id),
+	foreign key(merchant_id) references merchant_message(merchant_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//集单送券表
+create table user_consumeCount (
+	user_id int(11) not null comment '用户编号',
+	merchant_id int(11) not null comment '商家编号',
+	coupon_id int(11) not null comment '优惠券编号',
+	consume_count int(11) not null comment '集单要求数',
+	finished_consume int(11) not null comment '已完成的订单数',
+	foreign key(user_id) references user_message(user_id),
+	foreign key(merchant_id) references merchant_message(merchant_id),
+	foreign key(coupon_id) references merchant_moneyOffMessage(coupon_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//配送地址表
+create table user_address (
+	address_id int(11) not null auto_increment primary key comment '地址编号',
+	user_id int(11) not null comment '用户编号',
+	province varchar(20)  not null comment '省',
+	city varchar(20) not null comment '市',
+	block varchar(20) not null comment '区',
+	address varchar(255) not null comment '地址',
+	user_name varchar(50) not null comment '联系人',
+	user_tel varchar(50) not null comment '电话',
+	foreign key(user_id) references user_message(user_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//商品订单表
+create table user_order (
+	order_id int(11) not null primary key comment '订单编号',
+	merchant_id int(11) not null comment '商家编号',
+	user_id int(11) not null comment '用户编号',
+	knight_id int(11) not null comment '骑手编号',
+	origin_money double not null comment '原始金额',
+	real_money double not null comment '结算金额',
+	moneyOff_id int(11) not null comment '满减编号',
+	uscoupon_id int(11) not null comment '使用优惠券编号',
+	order_time datetime not null comment '下单时间',
+	require_time datetime not null comment '要求送达时间',
+	address_id int(11) not null comment '配送地址编号',
+	order_state varchar(255) not null comment '订单状态',
+	foreign key(merchant_id) references merchant_message(merchant_id),
+	foreign key(knight_id) references knight_message(knight_id),
+	foreign key(uscoupon_id) references merchant_moneyOffMessage(coupon_id),
+	foreign key(moneyOff_id) references merchant_moneyOffWay(moneyOff_id),
+	foreign key(address_id) references user_address(address_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//订单详情表
+create table user_orderDetail (
+	order_id int(11) not null comment '订单编号',
+	goods_id int(11) not null comment '商品编号',
+	order_count int(11) not null comment '数量',
+	order_price double not null comment '价格',
+	single_sales double not null comment '单品优惠金额',
+	primary key(order_id),
+	foreign key(goods_id) references merchant_goodsDetails(goods_id)
+) engine = INNODB DEFAULT charset=utf8
+
+//管理员信息表
+create table root (
+	worker_id int(11) not null auto_increment,
+	worker_name varchar(50) not null,
+	worker_pwd varchar(20) not null,
+	primary key(worker_id)
+) engine = INNODB DEFAULT charset=utf8
+
+
+
+
+
