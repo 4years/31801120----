@@ -32,12 +32,14 @@ public class FrmUserReg extends JDialog implements ActionListener {
 	private JRadioButton jradio2 = new JRadioButton("女");
 	private JLabel labelHollow = new JLabel("                                      ");
 	private JLabel labelTel = new JLabel("电话：");
+	private JLabel labelEmail = new JLabel("邮箱：");
 	private JLabel labelCity = new JLabel("城市：");
 	private JLabel labelPwd = new JLabel("密码：");
 	private JLabel labelPwd2 = new JLabel("确认密码：");
 	
-	private JTextField edtUserId = new JTextField(20);
+	private JTextField edtUserName = new JTextField(20);
 	private JTextField edtTel = new JTextField(20);
+	private JTextField edtEmail = new JTextField(20);
 	private JTextField edtCity = new JTextField(20);
 	private JPasswordField edtPwd = new JPasswordField(20);
 	private JPasswordField edtPwd2 = new JPasswordField(18);
@@ -49,7 +51,7 @@ public class FrmUserReg extends JDialog implements ActionListener {
 		toolBar.add(btnCancel);
 		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
 		workPane.add(labelUser);
-		workPane.add(edtUserId);
+		workPane.add(edtUserName);
 		workPane.add(labelSex);
 		ButtonGroup group = new ButtonGroup();
 		group.add(jradio1);
@@ -59,6 +61,8 @@ public class FrmUserReg extends JDialog implements ActionListener {
 		workPane.add(labelHollow);
 		workPane.add(labelTel);
 		workPane.add(edtTel);
+		workPane.add(labelEmail);
+		workPane.add(edtEmail);
 		workPane.add(labelCity);
 		workPane.add(edtCity);
 		workPane.add(labelPwd);
@@ -75,18 +79,19 @@ public class FrmUserReg extends JDialog implements ActionListener {
 		if(e.getSource() == this.btnCancel)
 			this.setVisible(false);
 		else if(e.getSource() == this.btnOk){
-			String username = this.edtUserId.getText();
+			String username = this.edtUserName.getText();
 			String userSex;
 			if(this.jradio1.isSelected())
 				userSex = this.jradio1.getText();
 			else
 				userSex = this.jradio2.getText();
 			String userTel = this.edtTel.getText();
+			String email = this.edtEmail.getText();
 			String userCity = this.edtCity.getText();
 			String pwd1 = new String(this.edtPwd.getPassword());
 			String pwd2 = new String(this.edtPwd2.getPassword());
 			try {
-				BeanUser user = TakeawayUtil.userManager.reg(username,userSex,userTel,userCity,pwd1,pwd2);
+				BeanUser user = TakeawayUtil.userManager.reg(username,userSex,userTel,email,userCity,pwd1,pwd2);
 				JOptionPane.showMessageDialog(null, "注册成功");
 				this.setVisible(false);
 			} catch (BaseException e1) {
