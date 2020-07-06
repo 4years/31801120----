@@ -84,7 +84,7 @@ public class MGoodsManager implements GoodsManager {
 		try {
 			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false);
-			String sql = "select goods_id,kind_id,merchant_name,goods_name,goods_price,goods_sales,goods_num,order_id from merchant_goodsDetails where merchant_name = ? order by goods_id";
+			String sql = "select goods_id,kind_id,merchant_name,goods_name,goods_price,goods_sales,goods_num,order_id from merchant_goodsDetails where merchant_name = ? order by order_id";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, BeanMerchant.currentLoginMerchant.getMerchant_name());
 			java.sql.ResultSet rs = pst.executeQuery();
@@ -108,6 +108,47 @@ public class MGoodsManager implements GoodsManager {
 			throw new DbException(e);
 		} finally {
 			if(conn != null) 
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return result;
+	}
+	
+	public List<BeanGoodsDetails> loadAll(BeanMerchant merchant) throws BaseException {
+		List<BeanGoodsDetails> result = new ArrayList<BeanGoodsDetails>();
+		BeanGoodsDetails BGD = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select goods_id,kind_id,merchant_name,goods_name,goods_price,goods_sales,goods_num,order_id from merchant_goodsDetails where merchant_name = ? order by order_id";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, merchant.getMerchant_name());
+			java.sql.ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				BGD = new BeanGoodsDetails();
+				BGD.setGoods_id(rs.getInt(1));
+				BGD.setKind_id(rs.getInt(2));
+				BGD.setMerchant_Name(rs.getString(3));
+				BGD.setGoods_name(rs.getString(4));
+				BGD.setGoods_price(rs.getDouble(5));
+				BGD.setGoods_sales(rs.getDouble(6));
+				BGD.setGoods_num(rs.getInt(7));
+				BGD.setOrder_id(rs.getInt(8));
+				result.add(BGD);
+			}
+			rs.close();
+			pst.close();
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
 				try {
 					conn.rollback();
 					conn.close();
