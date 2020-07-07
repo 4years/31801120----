@@ -17,15 +17,15 @@ public class MUserManager implements UserManager {
 	public BeanUser reg(String username,String usersex,String usertel,String email,String city,String pwd,String pwd2) throws BaseException {
 		Connection conn = null;
 		if(username == null || "".equals(username))
-			throw new BusinessException("ç”¨æˆ·åä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÓÃ»§Ãû²»ÄÜÎª¿Õ");
 		if(pwd == null || "".equals(pwd) || pwd2 == null || "".equals(pwd2))
-			throw new BusinessException("å¯†ç ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÃÜÂë²»ÄÜÎª¿Õ");
 		if(!(pwd.equals(pwd2)))
-			throw new BusinessException("ä¸¤æ¬¡å¯†ç è¾“å…¥ä¸ä¸€è‡´");
+			throw new BusinessException("Á½´ÎÃÜÂëÊäÈë²»Ò»ÖÂ");
 		if(usertel == null || "".equals(usertel))
-			throw new BusinessException("è”ç³»æ–¹å¼ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÁªÏµ·½Ê½²»ÄÜÎª¿Õ");
 		if(city == null || "".equals(city))
-			throw new BusinessException("åŸå¸‚ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("³ÇÊĞ²»ÄÜÎª¿Õ");
 		BeanUser BU = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -35,10 +35,10 @@ public class MUserManager implements UserManager {
 			pst.setString(1, username);
 			java.sql.ResultSet rs = pst.executeQuery();
 			if(rs.next())
-				throw new BusinessException("è¯¥ç”¨æˆ·åå·²å­˜åœ¨");
+				throw new BusinessException("¸ÃÓÃ»§ÃûÒÑ´æÔÚ");
 			rs.close();
 			pst.close();
-			sql = "insert into user_message(user_name,user_sex,user_pwd,user_tel,user_email,user_city,user_regdate,user_vip) values(?,?,?,?,?,?,?,'å¦')";
+			sql = "insert into user_message(user_name,user_sex,user_pwd,user_tel,user_email,user_city,user_regdate,user_vip) values(?,?,?,?,?,?,?,'·ñ')";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, username);
 			pst.setString(2, usersex);
@@ -74,9 +74,9 @@ public class MUserManager implements UserManager {
 	
 	public BeanUser login(String username,String pwd) throws BaseException {
 		if(username == null || "".equals(username))
-			throw new BusinessException("ç”¨æˆ·åä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÓÃ»§Ãû²»ÄÜÎª¿Õ");
 		if(pwd == null || "".equals(pwd))
-			throw new BusinessException("å¯†ç ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÃÜÂë²»ÄÜÎª¿Õ");
 		Connection conn = null;
 		BeanUser BU = null;
 		try {
@@ -93,10 +93,10 @@ public class MUserManager implements UserManager {
 					BU.setUser_pwd(pwd);
 				}
 				else
-					throw new BusinessException("å¯†ç é”™è¯¯");
+					throw new BusinessException("ÃÜÂë´íÎó");
 			}
 			else
-				throw new BusinessException("è¯¥ç”¨æˆ·ä¸å­˜åœ¨");
+				throw new BusinessException("¸ÃÓÃ»§²»´æÔÚ");
 			conn.commit();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -116,11 +116,11 @@ public class MUserManager implements UserManager {
 	public void changePwd(BeanUser user, String oldPwd,String newPwd, String newPwd2)throws BaseException {
 		Connection conn = null;
 		if("".equals(oldPwd) || oldPwd == null)
-			throw new BusinessException("åŸå¯†ç ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("Ô­ÃÜÂë²»ÄÜÎª¿Õ");
 		if("".equals(newPwd) || newPwd == null)
-			throw new BusinessException("æ–°å¯†ç ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ĞÂÃÜÂë²»ÄÜÎª¿Õ");
 		if(!(newPwd.equals(newPwd2)))
-			throw new BusinessException("æ–°å¯†ç ä¸¤æ¬¡è¾“å…¥éœ€ä¸€è‡´");
+			throw new BusinessException("ĞÂÃÜÂëÁ½´ÎÊäÈëĞèÒ»ÖÂ");
 		try {
 			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false);
@@ -130,7 +130,7 @@ public class MUserManager implements UserManager {
 			java.sql.ResultSet rs = pst.executeQuery();
 			rs.next();
 			if(!(oldPwd.equals(rs.getString(1))))
-					throw new BusinessException("åŸå¯†ç é”™è¯¯");
+					throw new BusinessException("Ô­ÃÜÂë´íÎó");
 			rs.close();
 			pst.close();
 			sql = "update user_message set user_pwd = ? where user_name = ?";
@@ -156,14 +156,14 @@ public class MUserManager implements UserManager {
 	
 	public void BeVip() throws BaseException {
 		if(BeanUser.isVip)
-			throw new BusinessException("å·²ç»æ˜¯Vip");
+			throw new BusinessException("ÒÑ¾­ÊÇVip");
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false);
 			String sql = "update user_message set user_vip = ?,user_vipDeadLine = ? where user_name = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-			pst.setString(1, "æ˜¯");
+			pst.setString(1, "ÊÇ");
 			pst.setDate(2, new java.sql.Date(System.currentTimeMillis() + 2592000000L));
 			pst.setString(3, BeanUser.currentLoginUser.getUser_name());
 			pst.execute();
@@ -194,7 +194,7 @@ public class MUserManager implements UserManager {
 			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
 			java.sql.ResultSet rs = pst.executeQuery();
 			rs.next();
-			if("æ˜¯".equals(rs.getString(1)))
+			if("ÊÇ".equals(rs.getString(1)))
 				flag = true;
 			else
 				flag = false;
@@ -230,7 +230,7 @@ public class MUserManager implements UserManager {
 				int i = rs.getDate(1).compareTo(new java.sql.Date(System.currentTimeMillis()));
 				if(i < 0) {
 					CancelVip = false;
-					JOptionPane.showMessageDialog(null, "Vipå·²åˆ°æœŸ");
+					JOptionPane.showMessageDialog(null, "VipÒÑµ½ÆÚ");
 				}
 				else
 					CancelVip = true;
@@ -241,7 +241,7 @@ public class MUserManager implements UserManager {
 			if(CancelVip == false) {
 				sql = "update user_message set user_vip = ?,user_vipDeadLine = ? where user_name = ?";
 				pst = conn.prepareStatement(sql);
-				pst.setString(1, "å¦");
+				pst.setString(1, "·ñ");
 				pst.setNull(2, 0);
 				pst.setString(3, BeanUser.currentLoginUser.getUser_name());
 				pst.execute();
@@ -265,13 +265,13 @@ public class MUserManager implements UserManager {
 	
 	public void userAddAddress(String Province,String City,String Block,String Address,String Tel) throws BaseException {
 		if(Province == null || "".equals(Province))
-			throw new BusinessException("çœä»½ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("Ê¡·İ²»ÄÜÎª¿Õ");
 		if(City == null || "".equals(City))
-			throw new BusinessException("å¸‚ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÊĞ²»ÄÜÎª¿Õ");
 		if(Block == null || "".equals(Block))
-			throw new BusinessException("åŒºä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("Çø²»ÄÜÎª¿Õ");
 		if(Address == null || "".equals(Address))
-			throw new BusinessException("è¯¦ç»†åœ°å€ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÏêÏ¸µØÖ·²»ÄÜÎª¿Õ");
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();

@@ -2,6 +2,8 @@ package xm.takeway.control;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -16,11 +18,11 @@ public class MMerchantManager implements MerchantManager {
 	public BeanMerchant reg(String merchantName,String merchantRank,int avg_consume,int total_sales,String pwd,String pwd2) throws BaseException {
 		Connection conn = null;
 		if("".equals(merchantName) || merchantName == null)
-			throw new BusinessException("å•†å®¶åä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÉÌ¼ÒÃû²»ÄÜÎª¿Õ");
 		if("".equals(pwd) || pwd == null || "".equals(pwd2) || pwd2 == null)
-			throw new BusinessException("å¯†ç ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÃÜÂë²»ÄÜÎª¿Õ");
 		if(!(pwd.equals(pwd2)))
-			throw new BusinessException("ä¸¤æ¬¡å¯†ç è¾“å…¥éœ€ä¸€è‡´");
+			throw new BusinessException("Á½´ÎÃÜÂëÊäÈëĞèÒ»ÖÂ");
 		BeanMerchant BM = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -30,7 +32,7 @@ public class MMerchantManager implements MerchantManager {
 			pst.setString(1, merchantName);
 			java.sql.ResultSet rs = pst.executeQuery();
 			if(rs.next())
-				throw new BusinessException("è¯¥å•†å®¶åå·²å­˜åœ¨");
+				throw new BusinessException("¸ÃÉÌ¼ÒÃûÒÑ´æÔÚ");
 			rs.close();
 			pst.close();
 			
@@ -68,9 +70,9 @@ public class MMerchantManager implements MerchantManager {
 	public BeanMerchant login(String merchantName,String pwd) throws BaseException {
 		Connection conn = null;
 		if(merchantName == null || "".equals(merchantName))
-			throw new BusinessException("ç”¨æˆ·åä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÓÃ»§Ãû²»ÄÜÎª¿Õ");
 		if(pwd == null || "".equals(pwd))
-			throw new BusinessException("å¯†ç ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÃÜÂë²»ÄÜÎª¿Õ");
 		BeanMerchant BM = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -81,7 +83,7 @@ public class MMerchantManager implements MerchantManager {
 			java.sql.ResultSet rs = pst.executeQuery();
 			if(rs.next()) {
 				if(!pwd.equals(rs.getString(1)))
-					throw new BusinessException("å¯†ç é”™è¯¯");
+					throw new BusinessException("ÃÜÂë´íÎó");
 				else {
 					BM = new BeanMerchant();
 					BM.setMerchant_name(merchantName);
@@ -89,7 +91,7 @@ public class MMerchantManager implements MerchantManager {
 				}
 			}
 			else
-				throw new BusinessException("è¯¥ç”¨æˆ·ä¸å­˜åœ¨");
+				throw new BusinessException("¸ÃÓÃ»§²»´æÔÚ");
 			rs.close();
 			pst.close();
 			conn.commit();
@@ -110,11 +112,11 @@ public class MMerchantManager implements MerchantManager {
 	
 	public void changpwd(BeanMerchant merchant,String oldpwd,String newpwd,String newpwd2) throws BaseException {
 		if("".equals(newpwd) || newpwd == null || "".equals(newpwd2) || newpwd2 == null)
-			throw new BusinessException("æ–°å¯†ç ä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ĞÂÃÜÂë²»ÄÜÎª¿Õ");
 		if(!(newpwd.equals(newpwd2)))
-			throw new BusinessException("ä¸¤æ¬¡å¯†ç è¾“å…¥ä¸ä¸€è‡´");
+			throw new BusinessException("Á½´ÎÃÜÂëÊäÈë²»Ò»ÖÂ");
 		if(oldpwd.equals(newpwd))
-			throw new BusinessException("æ–°å¯†ç ä¸å¯ä¸åŸå¯†ç ä¸€è‡´");
+			throw new BusinessException("ĞÂÃÜÂë²»¿ÉÓëÔ­ÃÜÂëÒ»ÖÂ");
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -125,7 +127,7 @@ public class MMerchantManager implements MerchantManager {
 			java.sql.ResultSet rs = pst.executeQuery();
 			rs.next();
 			if(!(oldpwd.equals(rs.getString(1))))
-				throw new BusinessException("åŸå¯†ç é”™è¯¯");
+				throw new BusinessException("Ô­ÃÜÂë´íÎó");
 			rs.close();
 			pst.close();
 			sql = "update merchant_message set merchant_pwd = ? where merchant_name = ?";
@@ -147,4 +149,40 @@ public class MMerchantManager implements MerchantManager {
 				}
 		}
 	}
+	
+	public List<BeanMerchant> loadAll() throws BaseException {
+		Connection conn = null;
+		List<BeanMerchant> result = new ArrayList<BeanMerchant>();
+		BeanMerchant BM = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select merchant_id,merchant_name,merchant_rank,avg_consume,total_sales from merchant_message";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			java.sql.ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				BM = new BeanMerchant();
+				BM.setMerchant_id(rs.getInt(1));
+				BM.setMerchant_name(rs.getString(2));
+				BM.setMerchant_rank(rs.getString(3));
+				BM.setAvg_consume(rs.getDouble(4));
+				BM.setTotal_sales(rs.getInt(5));
+				result.add(BM);
+			}
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return result;
+	}
+	
 }

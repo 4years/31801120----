@@ -19,7 +19,7 @@ public class MGoodsManager implements GoodsManager {
 	public BeanGoodsDetails addGoods(int kind_id,String goods_name,double goods_price,double goods_sales,int goods_num) throws BaseException {
 		Connection conn = null;
 		if(goods_name == null || "".equals(goods_name))
-			throw new BusinessException("å•†å“åä¸èƒ½ä¸ºç©º");
+			throw new BusinessException("ÉÌÆ·Ãû²»ÄÜÎª¿Õ");
 		BeanGoodsDetails BGD = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -29,7 +29,7 @@ public class MGoodsManager implements GoodsManager {
 			pst.setInt(1, kind_id);
 			java.sql.ResultSet rs = pst.executeQuery();
 			if(!rs.next())
-				throw new BusinessException("è¯¥ç±»åˆ«ä¸å­˜åœ¨");
+				throw new BusinessException("¸ÃÀà±ğ²»´æÔÚ");
 			rs.close();
 			pst.close();
 			sql = "select goods_id from merchant_goodsDetails where goods_name = ?";
@@ -37,7 +37,7 @@ public class MGoodsManager implements GoodsManager {
 			pst.setString(1, goods_name);
 			rs = pst.executeQuery();
 			if(rs.next())
-				throw new BusinessException("åŒåå•†å“å·²å­˜åœ¨");
+				throw new BusinessException("Í¬ÃûÉÌÆ·ÒÑ´æÔÚ");
 			rs.close();
 			pst.close();
 			int order_id;
@@ -61,7 +61,7 @@ public class MGoodsManager implements GoodsManager {
 			pst.execute();
 			pst.close();
 			conn.commit();
-			JOptionPane.showMessageDialog(null, "æ·»åŠ æˆåŠŸ");
+			JOptionPane.showMessageDialog(null, "Ìí¼Ó³É¹¦");
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -161,7 +161,7 @@ public class MGoodsManager implements GoodsManager {
 	
 	public void delGoods(BeanGoodsDetails goodsdetails) throws BaseException {
 		if(goodsdetails.getGoods_num() != 0)
-			throw new BusinessException("è¯¥å•†å“è¿˜æœ‰ä½™é‡");
+			throw new BusinessException("¸ÃÉÌÆ·»¹ÓĞÓàÁ¿");
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -186,7 +186,7 @@ public class MGoodsManager implements GoodsManager {
 			pst.close();
 					
 			conn.commit();
-			JOptionPane.showMessageDialog(null, "åˆ é™¤æˆåŠŸ");
+			JOptionPane.showMessageDialog(null, "É¾³ı³É¹¦");
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);

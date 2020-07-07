@@ -20,7 +20,7 @@ public class MShoppingCar implements ShoppingCarManager {
 	
 	public BeanShoppingCar addGoods(BeanGoodsDetails BGD,int num) throws BaseException {
 		if(BGD.getGoods_num() < num)
-			throw new BusinessException("è´­ä¹°æ•°é‡å¤§äºåº“å­˜ï¼Œè¯·é‡æ–°è¾“å…¥æ•°é‡");
+			throw new BusinessException("¹ºÂòÊıÁ¿´óÓÚ¿â´æ£¬ÇëÖØĞÂÊäÈëÊıÁ¿");
 		BeanShoppingCar BSC = null;
 		Connection conn = null;
 		try {
@@ -46,7 +46,7 @@ public class MShoppingCar implements ShoppingCarManager {
 			if(rs.next()) {
 				num += rs.getInt(2);
 				if(num > BGD.getGoods_num())
-					throw new BusinessException("è´­ä¹°æ•°é‡å¤§äºåº“å­˜ï¼Œè¯·é‡æ–°è¾“å…¥æ•°é‡");
+					throw new BusinessException("¹ºÂòÊıÁ¿´óÓÚ¿â´æ£¬ÇëÖØĞÂÊäÈëÊıÁ¿");
 				flag = 1;
 			}
 			rs.close();
@@ -80,7 +80,7 @@ public class MShoppingCar implements ShoppingCarManager {
 				pst.close();
 			}
 			conn.commit();
-			JOptionPane.showMessageDialog(null, "åŠ å…¥è´­ç‰©è½¦æˆåŠŸ");
+			JOptionPane.showMessageDialog(null, "¼ÓÈë¹ºÎï³µ³É¹¦");
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -153,7 +153,46 @@ public class MShoppingCar implements ShoppingCarManager {
 			pst.execute();
 			pst.close();
 			conn.commit();
-			JOptionPane.showMessageDialog(null, "åˆ é™¤æˆåŠŸ");
+			JOptionPane.showMessageDialog(null, "É¾³ı³É¹¦");
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	
+	public void settlementShoppingCar() throws BaseException {
+		List<BeanShoppingCar> result = this.loadAll();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "update merchant_goodsDetails set goods_num = goods_num - ? where goods_name = ? and merchant_name = ?";
+			int i;
+			for(i = 0;i < result.size();i++) {
+				java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+				pst.setInt(1, result.get(i).getNum());
+				pst.setString(2, result.get(i).getGoods_name());
+				pst.setString(3, result.get(i).getMerchant_name());
+				pst.execute();
+				pst.close();
+			}
+			
+			sql = "delete from user_shoppingCar where user_name = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+			pst.execute();
+			pst.close();
+			
+			//Î´Íê³É½«¶©µ¥¼ÓÈë¶©µ¥ÏêÇéºÍ¶©µ¥ÖĞ£¬´ıÍê³É
+			conn.commit();
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
