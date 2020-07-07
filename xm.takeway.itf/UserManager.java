@@ -33,5 +33,11 @@ public interface UserManager {
 	 * @param newPwd2 重复输入的新密码
 	 */
 	public void changePwd(BeanUser user, String oldPwd,String newPwd, String newPwd2)throws BaseException;
+	//成为Vip
+	public void BeVip() throws BaseException;
+	//判断是否为Vip
+	public Boolean isVip() throws BaseException;
+	//判断Vip是否到期
+	public Boolean isVipDead() throws BaseException;
 	
 }
