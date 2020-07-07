@@ -1,8 +1,10 @@
 package xm.takeway.control;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+
+import javax.swing.JOptionPane;
 
 import xm.takeway.itf.UserManager;
 import xm.takeway.model.BeanUser;
@@ -150,6 +152,111 @@ public class MUserManager implements UserManager {
 					e.printStackTrace();
 				}
 		}
-		
 	}
+	
+	public void BeVip() throws BaseException {
+		if(BeanUser.isVip)
+			throw new BusinessException("已经是Vip");
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "update user_message set user_vip = ?,user_vipDeadLine = ? where user_name = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, "是");
+			pst.setDate(2, new java.sql.Date(System.currentTimeMillis() + 2592000000L));
+			pst.setString(3, BeanUser.currentLoginUser.getUser_name());
+			pst.execute();
+			BeanUser.isVip = true;
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	
+	public Boolean isVip() throws BaseException {
+		Boolean flag = false;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select user_vip from user_message where user_name = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+			java.sql.ResultSet rs = pst.executeQuery();
+			rs.next();
+			if("是".equals(rs.getString(1)))
+				flag = true;
+			else
+				flag = false;
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return flag;
+	}
+	
+	public Boolean isVipDead() throws BaseException {
+		Boolean CancelVip = false;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select user_vipDeadLine from user_message where user_name = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+			java.sql.ResultSet rs = pst.executeQuery();
+			if(rs.next()) {
+				int i = rs.getDate(1).compareTo(new java.sql.Date(System.currentTimeMillis()));
+				if(rs.getDate(1) == null || i < 0) {
+					CancelVip = false;
+					JOptionPane.showMessageDialog(null, "Vip已到期");
+				}
+				else
+					CancelVip = true;
+			}
+			rs.close();
+			pst.close();
+			if(CancelVip == false) {
+				sql = "update user_message set user_vip = ? where user_name = ?";
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, "否");
+				pst.setString(2, BeanUser.currentLoginUser.getUser_name());
+				pst.execute();
+				pst.close();
+			}
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return CancelVip;
+	}
+	
 }
