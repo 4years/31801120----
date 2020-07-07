@@ -35,22 +35,48 @@ public class MShoppingCar implements ShoppingCarManager {
 				order_id = 0;
 			rs.close();
 			pst.close();
-			sql = "insert into user_shoppingCar(order_id,goods_name,merchant_name,goods_price,num,user_name) values(?,?,?,?,?,?)";
+			sql = "select id,num from user_shoppingCar where goods_name = ? and merchant_name = ?";
 			pst = conn.prepareStatement(sql);
-			pst.setInt(1, order_id);
-			pst.setString(2, BGD.getGoods_name());
-			pst.setString(3, BGD.getMerchant_Name());
-			pst.setDouble(4, BGD.getGoods_price());
-			pst.setInt(5, num);
-			pst.setString(6, BeanUser.currentLoginUser.getUser_name());
-			pst.execute();
+			pst.setString(1, BGD.getGoods_name());
+			pst.setString(2, BGD.getMerchant_Name());
+			rs = pst.executeQuery();
+			int flag = 0;
+			if(rs.next()) {
+				num += rs.getInt(2);
+				if(num > BGD.getGoods_num())
+					throw new BusinessException("购买数量大于库存，请重新输入数量");
+				flag = 1;
+			}
+			rs.close();
 			pst.close();
-			BSC = new BeanShoppingCar();
-			BSC.setOrder_id(order_id);
-			BSC.setGoods_name(BGD.getGoods_name());
-			BSC.setMerchant_name(BGD.getMerchant_Name());
-			BSC.setGoods_price(BGD.getGoods_price());
-			BSC.setNum(num);
+			if(flag == 0) {
+				sql = "insert into user_shoppingCar(order_id,goods_name,merchant_name,goods_price,num,user_name) values(?,?,?,?,?,?)";
+				pst = conn.prepareStatement(sql);
+				pst.setInt(1, order_id);
+				pst.setString(2, BGD.getGoods_name());
+				pst.setString(3, BGD.getMerchant_Name());
+				pst.setDouble(4, BGD.getGoods_price());
+				pst.setInt(5, num);
+				pst.setString(6, BeanUser.currentLoginUser.getUser_name());
+				pst.execute();
+				pst.close();
+				BSC = new BeanShoppingCar();
+				BSC.setOrder_id(order_id);
+				BSC.setGoods_name(BGD.getGoods_name());
+				BSC.setMerchant_name(BGD.getMerchant_Name());
+				BSC.setGoods_price(BGD.getGoods_price());
+				BSC.setNum(num);	
+			}
+			else {
+				pst.close();
+				sql = "update user_shoppingCar set num = ? where goods_name = ? and merchant_name = ?";
+				pst = conn.prepareStatement(sql);
+				pst.setInt(1, num);
+				pst.setString(2, BGD.getGoods_name());
+				pst.setString(3, BGD.getMerchant_Name());
+				pst.execute();
+				pst.close();
+			}
 			conn.commit();
 		} catch(SQLException e) {
 			e.printStackTrace();
