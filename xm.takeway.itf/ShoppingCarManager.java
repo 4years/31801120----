@@ -11,4 +11,6 @@ public interface ShoppingCarManager {
 	public List<BeanShoppingCar> loadAll() throws BaseException;
 	//向购物车加入商品
 	public BeanShoppingCar addGoods(BeanGoodsDetails BGD,int num) throws BaseException;
+	//删除购物车商品
+	public void delGoodsFromShoppingCar(BeanShoppingCar shoppingCar) throws BaseException;
 }
