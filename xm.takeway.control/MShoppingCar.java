@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import xm.takeway.itf.ShoppingCarManager;
 import xm.takeway.model.BeanGoodsDetails;
 import xm.takeway.model.BeanShoppingCar;
@@ -78,6 +80,7 @@ public class MShoppingCar implements ShoppingCarManager {
 				pst.close();
 			}
 			conn.commit();
+			JOptionPane.showMessageDialog(null, "加入购物车成功");
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw new DbException(e);
@@ -127,4 +130,42 @@ public class MShoppingCar implements ShoppingCarManager {
 		}
 		return result;
 	}
+	
+	public void delGoodsFromShoppingCar(BeanShoppingCar shoppingCar) throws BaseException {
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql ="delete from user_shoppingCar where order_id = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setInt(1, shoppingCar.getOrder_id());
+			pst.execute();
+			pst.close();
+			
+			sql = "update user_shoppingCar set order_id = -order_id where order_id > ?";
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, shoppingCar.getOrder_id());
+			pst.execute();
+			pst.close();
+			
+			sql = "update user_shoppingCar set order_id = -1 - order_id where order_id < 0";
+			pst = conn.prepareStatement(sql);
+			pst.execute();
+			pst.close();
+			conn.commit();
+			JOptionPane.showMessageDialog(null, "删除成功");
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	
 }
