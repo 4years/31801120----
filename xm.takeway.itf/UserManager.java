@@ -39,5 +39,7 @@ public interface UserManager {
 	public Boolean isVip() throws BaseException;
 	//判断Vip是否到期
 	public Boolean isVipDead() throws BaseException;
+	//添加收货地址
+	public void userAddAddress(String Province,String City,String Block,String Address) throws BaseException;
 	
 }
