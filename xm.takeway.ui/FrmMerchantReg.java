@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -67,6 +68,12 @@ public class FrmMerchantReg extends JDialog implements ActionListener {
 		workPane.add(edtPwd2);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		this.setSize(310, 250);
+		//屏幕居中显示
+		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		this.setLocation((int) (width - this.getWidth()) / 2,
+			(int) (height - this.getHeight()) / 2);
+		this.validate();
 		this.btnCancel.addActionListener(this);
 		this.btnOk.addActionListener(this);
 	}
@@ -76,18 +83,20 @@ public class FrmMerchantReg extends JDialog implements ActionListener {
 			this.setVisible(false);
 		else if(e.getSource() == this.btnOk) {
 			String merchantName = this.edtUser.getText();
-			String merchantRank = (String)this.jcb.getSelectedItem();
-			double avg_consume = Double.valueOf(this.edtavgC.getText());
-			int total_sales = Integer.valueOf(this.edtToS.getText());
+			String merchantRank = String.valueOf(this.jcb.getSelectedItem());
 			String pwd = this.edtPwd.getText();
 			String pwd2 = this.edtPwd2.getText();
 			try {
+				int avg_consume = Integer.parseInt(this.edtavgC.getText());
+				int total_sales = Integer.parseInt(this.edtToS.getText());
 				BeanMerchant merchant = TakeawayUtil.merchantManager.reg(merchantName, merchantRank, avg_consume, total_sales, pwd, pwd2);
 				JOptionPane.showMessageDialog(null, "注册成功");
 				this.setVisible(false);
 			} catch(BaseException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
 				return;
+			} catch(NumberFormatException e2) {
+				e2.printStackTrace();
 			}
 		}
 	}
