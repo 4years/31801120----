@@ -224,22 +224,26 @@ public class MUserManager implements UserManager {
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
 			java.sql.ResultSet rs = pst.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
+				if(rs.getDate(1) == null)
+					break;
 				int i = rs.getDate(1).compareTo(new java.sql.Date(System.currentTimeMillis()));
-				if(rs.getDate(1) == null || i < 0) {
+				if(i < 0) {
 					CancelVip = false;
 					JOptionPane.showMessageDialog(null, "Vip已到期");
 				}
 				else
 					CancelVip = true;
+				
 			}
 			rs.close();
 			pst.close();
 			if(CancelVip == false) {
-				sql = "update user_message set user_vip = ? where user_name = ?";
+				sql = "update user_message set user_vip = ?,user_vipDeadLine = ? where user_name = ?";
 				pst = conn.prepareStatement(sql);
 				pst.setString(1, "否");
-				pst.setString(2, BeanUser.currentLoginUser.getUser_name());
+				pst.setNull(2, 0);
+				pst.setString(3, BeanUser.currentLoginUser.getUser_name());
 				pst.execute();
 				pst.close();
 			}
@@ -258,5 +262,45 @@ public class MUserManager implements UserManager {
 		}
 		return CancelVip;
 	}
+	
+	public void userAddAddress(String Province,String City,String Block,String Address,String Tel) throws BaseException {
+		if(Province == null || "".equals(Province))
+			throw new BusinessException("省份不能为空");
+		if(City == null || "".equals(City))
+			throw new BusinessException("市不能为空");
+		if(Block == null || "".equals(Block))
+			throw new BusinessException("区不能为空");
+		if(Address == null || "".equals(Address))
+			throw new BusinessException("详细地址不能为空");
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "insert into user_address(province,city,block,address,user_name,user_tel) values(?,?,?,?,?,?)";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, Province);
+			pst.setString(2, City);
+			pst.setString(3, Block);
+			pst.setString(4, Address);
+			pst.setString(5, BeanUser.currentLoginUser.getUser_name());
+			pst.setString(6, Tel);
+			pst.execute();
+			pst.close();
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	
+	
 	
 }
