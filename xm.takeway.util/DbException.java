@@ -2,6 +2,6 @@ package xm.takeway.util;
 
 public class DbException extends BaseException {
 	public DbException(java.lang.Throwable e) {
-		super("æ•°æ®åº“æ“ä½œé”™è¯¯ï¼š" + e.getMessage());
+		super("Êı¾İ¿â²Ù×÷´íÎó£º" + e.getMessage());
 	}
 }
