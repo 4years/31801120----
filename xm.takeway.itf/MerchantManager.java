@@ -7,9 +7,9 @@ import xm.takeway.util.BaseException;
 
 public interface MerchantManager {
 	/**
-	 * å•†å®¶æ³¨å†Œ
-	 * å•†å®¶åä¸èƒ½ä¸ºç©ºä¸”ä¸èƒ½é‡å¤
-	 * ä¸¤æ¬¡å¯†ç è¾“å…¥ä¸èƒ½ä¸ä¸€è‡´
+	 * ÉÌ¼Ò×¢²á
+	 * ÉÌ¼ÒÃû²»ÄÜÎª¿ÕÇÒ²»ÄÜÖØ¸´
+	 * Á½´ÎÃÜÂëÊäÈë²»ÄÜ²»Ò»ÖÂ
 	 * @param merchantName
 	 * @param pwd
 	 * @param pwd2
@@ -18,7 +18,7 @@ public interface MerchantManager {
 	 */
 	public BeanMerchant reg(String merchantName,String merchantRank,int avg_consume,int total_sales,String pwd,String pwd2) throws BaseException;
 	/**
-	 * å•†å®¶ç™»é™†
+	 * ÉÌ¼ÒµÇÂ½
 	 * @param merchantName
 	 * @param pwd
 	 * @return
@@ -26,9 +26,9 @@ public interface MerchantManager {
 	 */
 	public BeanMerchant login(String merchantName,String pwd) throws BaseException;
 	/**
-	 * ä¿®æ”¹å¯†ç 
-	 * æ—§å¯†ç éœ€ä¸€è‡´
-	 * æ–°å¯†ç ä¸¤æ¬¡è¾“å…¥éœ€ä¸€è‡´
+	 * ĞŞ¸ÄÃÜÂë
+	 * ¾ÉÃÜÂëĞèÒ»ÖÂ
+	 * ĞÂÃÜÂëÁ½´ÎÊäÈëĞèÒ»ÖÂ
 	 * @param merchant
 	 * @param oldpwd
 	 * @param newpwd

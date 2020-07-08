@@ -7,10 +7,12 @@ import xm.takeway.model.BeanShoppingCar;
 import xm.takeway.util.BaseException;
 
 public interface ShoppingCarManager {
-	//åŠ è½½è´­ç‰©è½¦ä¿¡æ¯
+	//¼ÓÔØ¹ºÎï³µĞÅÏ¢
 	public List<BeanShoppingCar> loadAll() throws BaseException;
-	//å‘è´­ç‰©è½¦åŠ å…¥å•†å“
+	//Ïò¹ºÎï³µ¼ÓÈëÉÌÆ·
 	public BeanShoppingCar addGoods(BeanGoodsDetails BGD,int num) throws BaseException;
-	//åˆ é™¤è´­ç‰©è½¦å•†å“
+	//É¾³ı¹ºÎï³µÉÌÆ·
 	public void delGoodsFromShoppingCar(BeanShoppingCar shoppingCar) throws BaseException;
+	//¹ºÎï³µ½áËã
+	public void settlementShoppingCar() throws BaseException;
 }

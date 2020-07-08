@@ -5,19 +5,19 @@ import xm.takeway.util.BaseException;
 
 public interface UserManager {
 	/**
-	 * ç”¨æˆ·æ³¨å†Œï¼š
-	 * è¦æ±‚ç”¨æˆ·åä¸èƒ½ä¸ºç©ºï¼Œä¸èƒ½é‡å¤
-	 * ä¸¤æ¬¡è¾“å…¥å¯†ç éœ€ä¸€è‡´ï¼Œå¯†ç ä¸èƒ½ä¸ºç©º
-	 * @param pwd  å¯†ç 
-	 * @param pwd2 é‡å¤è¾“å…¥å¯†ç 
+	 * ÓÃ»§×¢²á£º
+	 * ÒªÇóÓÃ»§Ãû²»ÄÜÎª¿Õ£¬²»ÄÜÖØ¸´
+	 * Á½´ÎÊäÈëÃÜÂëĞèÒ»ÖÂ£¬ÃÜÂë²»ÄÜÎª¿Õ
+	 * @param pwd  ÃÜÂë
+	 * @param pwd2 ÖØ¸´ÊäÈëÃÜÂë
 	 * @return
 	 * @throws BaseException
 	 */
 	public BeanUser reg(String username,String usersex,String usertel,String city,String email,String pwd,String pwd2) throws BaseException;
 	/**
-	 * ç™»é™†
-	 *  1ã€å¦‚æœç”¨æˆ·ä¸å­˜åœ¨æˆ–è€…å¯†ç é”™è¯¯ï¼ŒæŠ›å‡ºä¸€ä¸ªå¼‚å¸¸
-	 *  2ã€å¦‚æœè®¤è¯æˆåŠŸï¼Œåˆ™è¿”å›å½“å‰ç”¨æˆ·ä¿¡æ¯
+	 * µÇÂ½
+	 *  1¡¢Èç¹ûÓÃ»§²»´æÔÚ»òÕßÃÜÂë´íÎó£¬Å×³öÒ»¸öÒì³£
+	 *  2¡¢Èç¹ûÈÏÖ¤³É¹¦£¬Ôò·µ»Øµ±Ç°ÓÃ»§ĞÅÏ¢
 	 * @param userid
 	 * @param pwd
 	 * @return
@@ -25,21 +25,21 @@ public interface UserManager {
 	 */
 	public BeanUser login(String username,String pwd)throws BaseException;
 	/**
-	 * ä¿®æ”¹å¯†ç 
-	 * å¦‚æœæ²¡æœ‰æˆåŠŸä¿®æ”¹ï¼Œåˆ™æŠ›å‡ºå¼‚å¸¸
-	 * @param user    å½“å‰ç”¨æˆ·
-	 * @param oldPwd  åŸå¯†ç 
-	 * @param newPwd  æ–°å¯†ç 
-	 * @param newPwd2 é‡å¤è¾“å…¥çš„æ–°å¯†ç 
+	 * ĞŞ¸ÄÃÜÂë
+	 * Èç¹ûÃ»ÓĞ³É¹¦ĞŞ¸Ä£¬ÔòÅ×³öÒì³£
+	 * @param user    µ±Ç°ÓÃ»§
+	 * @param oldPwd  Ô­ÃÜÂë
+	 * @param newPwd  ĞÂÃÜÂë
+	 * @param newPwd2 ÖØ¸´ÊäÈëµÄĞÂÃÜÂë
 	 */
 	public void changePwd(BeanUser user, String oldPwd,String newPwd, String newPwd2)throws BaseException;
-	//æˆä¸ºVip
+	//³ÉÎªVip
 	public void BeVip() throws BaseException;
-	//åˆ¤æ–­æ˜¯å¦ä¸ºVip
+	//ÅĞ¶ÏÊÇ·ñÎªVip
 	public Boolean isVip() throws BaseException;
-	//åˆ¤æ–­Vipæ˜¯å¦åˆ°æœŸ
+	//ÅĞ¶ÏVipÊÇ·ñµ½ÆÚ
 	public Boolean isVipDead() throws BaseException;
-	//æ·»åŠ æ”¶è´§åœ°å€
-	public void userAddAddress(String Province,String City,String Block,String Address) throws BaseException;
+	//Ìí¼ÓÊÕ»õµØÖ·
+	public void userAddAddress(String Province,String City,String Block,String Address,String Tel) throws BaseException;
 	
 }

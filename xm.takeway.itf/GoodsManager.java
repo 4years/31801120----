@@ -7,12 +7,12 @@ import xm.takeway.model.BeanMerchant;
 import xm.takeway.util.BaseException;
 
 public interface GoodsManager {
-	//æ·»åŠ å•†å“
+	//Ìí¼ÓÉÌÆ·
 	public BeanGoodsDetails addGoods(int kind_id,String goods_name,double goods_price,double goods_sales,int goods_num) throws BaseException;
-	//åŠ è½½å•†å“
+	//¼ÓÔØÉÌÆ·
 	public List<BeanGoodsDetails> loadAll() throws BaseException;
-	//ç”¨æˆ·æŒ‰å•†å®¶åŠ è½½å•†å“
+	//ÓÃ»§°´ÉÌ¼Ò¼ÓÔØÉÌÆ·
 	public List<BeanGoodsDetails> loadAll(BeanMerchant merchant) throws BaseException;
-	//åˆ é™¤å•†å“
+	//É¾³ıÉÌÆ·
 	public void delGoods(BeanGoodsDetails goodsdetails) throws BaseException;
 }
