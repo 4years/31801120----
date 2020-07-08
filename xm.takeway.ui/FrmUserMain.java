@@ -3,6 +3,7 @@ package xm.takeway.ui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -34,20 +35,29 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
 	private JMenuBar menubar = new JMenuBar(); ;
-	private JMenu menu = new JMenu("èœå•");
-	private JMenu menu_order = new JMenu("æ’åºæ–¹å¼");
-	private JMenu menu_more = new JMenu("æ›´å¤š");
-	//èœå•åˆ—è¡¨
-	private JMenuItem menuItem_addGoodsToShoppingCar = new JMenuItem("åŠ å…¥è´­ç‰©è½¦");
-	private JMenuItem menuItem_delGoods = new JMenuItem("åˆ é™¤å•†å“");
-	//æ’åºåˆ—è¡¨
-	private JMenuItem menuItem_orderByPrice_Up = new JMenuItem("æŒ‰ä»·æ ¼å‡åº");
-	private JMenuItem menuItem_orderByPrice_Down = new JMenuItem("æŒ‰ä»·æ ¼é™åº");
-	private JMenuItem menuItem_orderByKind = new JMenuItem("æŒ‰ç±»åˆ«æ’åº");
-	//æ›´å¤šåˆ—è¡¨
-	private JMenuItem menuItem_BeVip = new JMenuItem("æˆä¸ºVIP");
-	private JMenuItem menuItem_modifyPwd = new JMenuItem("ä¿®æ”¹å¯†ç ");
-	private JMenuItem menuItem_flash = new JMenuItem("åˆ·æ–°");
+	private JMenu menu = new JMenu("²Ëµ¥");
+	private JMenu menu_order = new JMenu("ÅÅĞò·½Ê½");
+	private JMenu menu_orderDetails = new JMenu("¶©µ¥ÏêÇé");
+	private JMenu menu_Address = new JMenu("µØÖ·¹ÜÀí");
+	private JMenu menu_more = new JMenu("¸ü¶à");
+	//²Ëµ¥ÁĞ±í
+	private JMenuItem menuItem_addGoodsToShoppingCar = new JMenuItem("¼ÓÈë¹ºÎï³µ");
+	private JMenuItem menuItem_delGoods = new JMenuItem("É¾³ı¹ºÎï³µÉÌÆ·");
+	private JMenuItem menuItem_settlement = new JMenuItem("½áËã");
+	//ÅÅĞòÁĞ±í
+	private JMenuItem menuItem_orderByPrice_Up = new JMenuItem("°´¼Û¸ñÉıĞò");
+	private JMenuItem menuItem_orderByPrice_Down = new JMenuItem("°´¼Û¸ñ½µĞò");
+	private JMenuItem menuItem_orderByKind = new JMenuItem("°´Àà±ğÅÅĞò");
+	//¶©µ¥ÏêÇéÁĞ±í
+	private JMenuItem menuItem_nowOrder = new JMenuItem("µ±Ç°¶©µ¥");
+	private JMenuItem menuItem_historyOrder = new JMenuItem("ÀúÊ·¶©µ¥");
+	//µØÖ·¹ÜÀíÁĞ±í
+	private JMenuItem menuItem_addAddress = new JMenuItem("Ìí¼ÓÊÕ»õµØÖ·");
+	private JMenuItem menuItem_addressManager = new JMenuItem("µØÖ·¹ÜÀí");
+	//¸ü¶àÁĞ±í
+	private JMenuItem menuItem_BeVip = new JMenuItem("³ÉÎªVIP");
+	private JMenuItem menuItem_modifyPwd = new JMenuItem("ĞŞ¸ÄÃÜÂë");
+	private JMenuItem menuItem_flash = new JMenuItem("Ë¢ĞÂ");
 	
 //	private FrmLogin dlgLogin = null;
 	private JPanel statusBar = new JPanel();
@@ -77,7 +87,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 		try {
 			allMerchant = TakeawayUtil.merchantManager.loadAll();
 		} catch (BaseException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		tblMerchantData =  new Object[allMerchant.size()][BeanMerchant.tableMerchantTitles.length];
@@ -96,7 +106,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 		try {
 			allGoods = TakeawayUtil.goodsManager.loadAll(curMerchant);
 		} catch (BaseException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		tblGoodsData = new Object[allGoods.size()][BeanGoodsDetails.tableGoodsTitles.length];
@@ -113,7 +123,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 		try {
 			allShoppingCar = TakeawayUtil.shoppingCarManager.loadAll();
 		} catch (BaseException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		tblShoppingCarData =  new Object[allShoppingCar.size()][BeanShoppingCar.tableShoppingCarTitles.length];
@@ -128,22 +138,33 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	
 	public FrmUserMain(){
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
-		this.setTitle("ç”¨æˆ·å¤–å–ç³»ç»Ÿ");
-	    //èœå•
+		this.setTitle("ÓÃ»§ÍâÂôÏµÍ³");
+	    //²Ëµ¥ ¼àÌıÇø
 	    this.menu.add(this.menuItem_addGoodsToShoppingCar); this.menuItem_addGoodsToShoppingCar.addActionListener(this);
 	    this.menu.add(this.menuItem_delGoods); this.menuItem_delGoods.addActionListener(this);
+	    this.menu.add(this.menuItem_settlement); this.menuItem_settlement.addActionListener(this);
+	    //ÅÅĞò ¼àÌıÇø
 	    this.menu_order.add(this.menuItem_orderByPrice_Up); this.menuItem_orderByPrice_Up.addActionListener(this);
 	    this.menu_order.add(this.menuItem_orderByPrice_Down); this.menuItem_orderByPrice_Down.addActionListener(this);
 	    this.menu_order.add(this.menuItem_orderByKind); this.menuItem_orderByKind.addActionListener(this);
+	    //¶©µ¥ÏêÇé ¼àÌıÇø
+	    this.menu_orderDetails.add(this.menuItem_nowOrder); this.menuItem_nowOrder.addActionListener(this);
+	    this.menu_orderDetails.add(this.menuItem_historyOrder); this.menuItem_historyOrder.addActionListener(this);
+	    //µØÖ·¹ÜÀí ¼àÌıÇø
+	    this.menu_Address.add(this.menuItem_addAddress); this.menuItem_addAddress.addActionListener(this);
+	    this.menu_Address.add(this.menuItem_addressManager); this.menuItem_addressManager.addActionListener(this);
+	    //¸ü¶à ¼àÌıÇø
 	    this.menu_more.add(this.menuItem_BeVip); this.menuItem_BeVip.addActionListener(this);
 	    this.menu_more.add(this.menuItem_modifyPwd); this.menuItem_modifyPwd.addActionListener(this);
 	    this.menu_more.add(this.menuItem_flash); this.menuItem_flash.addActionListener(this);
 	    
 	    menubar.add(menu);
 	    menubar.add(menu_order);
+	    menubar.add(menu_orderDetails);
+	    menubar.add(menu_Address);
 	    menubar.add(menu_more);
 	    this.setJMenuBar(menubar);
-	    //åœ¨ä¸»ç•Œé¢æ˜¾ç¤ºå•†å®¶ä¿¡æ¯
+	    //ÔÚÖ÷½çÃæÏÔÊ¾ÉÌ¼ÒĞÅÏ¢
 	    this.getContentPane().add(new JScrollPane(this.dataTableMerchant), BorderLayout.WEST);
 	    
 	    this.dataTableMerchant.addMouseListener(new MouseAdapter () {
@@ -166,15 +187,41 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	    		curGoods = allGoods.get(i);
 	    	}
 	    });
-	    //åœ¨ä¸»ç•Œé¢ä¸­å¤®æ˜¾ç¤ºé€‰ä¸­å•†å®¶çš„å•†å“ä¿¡æ¯
+	    this.dataTableShoppingCar.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		int i = FrmUserMain.this.dataTableShoppingCar.getSelectedRow();
+	    		if(i < 0) {
+	    			return;
+	    		}
+	    		curShoppingCar = allShoppingCar.get(i);
+	    	}
+	    });
+	    //ÔÚÖ÷½çÃæÖĞÑëÏÔÊ¾Ñ¡ÖĞÉÌ¼ÒµÄÉÌÆ·ĞÅÏ¢
 	    this.getContentPane().add(new JScrollPane(this.dataTableGoods), BorderLayout.CENTER);
-	    //åœ¨ä¸»ç•Œé¢å³ä¾§æ˜¾ç¤ºè´­ç‰©è½¦ä¿¡æ¯
+	    //ÔÚÖ÷½çÃæÓÒ²àÏÔÊ¾¹ºÎï³µĞÅÏ¢
 	    this.getContentPane().add(new JScrollPane(this.dataTableShoppingCar), BorderLayout.EAST);
 	    this.reloadMerchantTable();
 	    this.reloadShoppingCarTable();
-	    //çŠ¶æ€æ 
+	    //×´Ì¬À¸
 	    statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-	    JLabel label=new JLabel("æ‚¨å¥½! " + BeanUser.currentLoginUser.getUser_name());//ä¿®æ”¹æˆ   æ‚¨å¥½ï¼+ç™»é™†ç”¨æˆ·å
+	    BeanUser.isVip = false;
+	    try {
+			if(TakeawayUtil.userManager.isVipDead())
+			try {
+				BeanUser.isVip = TakeawayUtil.userManager.isVip();
+			} catch(BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else {
+				BeanUser.isVip = false;
+			}
+		} catch (HeadlessException | BaseException e1) {
+			e1.printStackTrace();
+		}
+	    JLabel label = new JLabel("ÄúºÃ! " + BeanUser.currentLoginUser.getUser_name());
+	    if(BeanUser.isVip) 
+	    	label = new JLabel("ÄúºÃ! ×ğ¾´µÄVipÓÃ»§ " + BeanUser.currentLoginUser.getUser_name());
 	    statusBar.add(label);
 	    this.getContentPane().add(statusBar,BorderLayout.SOUTH);
 	    this.addWindowListener(new WindowAdapter(){   
@@ -195,34 +242,55 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.menuItem_modifyPwd) {
-			FrmUserModifyPwd FUMP = new FrmUserModifyPwd(this,"ä¿®æ”¹å¯†ç ",true);
+			FrmUserModifyPwd FUMP = new FrmUserModifyPwd(this,"ĞŞ¸ÄÃÜÂë",true);
 			FUMP.setVisible(true);
 		} else if(e.getSource() == this.menuItem_addGoodsToShoppingCar) {
 			if(curGoods == null) {
-				JOptionPane.showMessageDialog(null, "è¯·é€‰æ‹©å•†å“", "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "ÇëÑ¡ÔñÉÌÆ·", "´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			try {
-				FrmAddShoppingCar FASC = new FrmAddShoppingCar(this,"é€‰æ‹©è´­ä¹°æ•°é‡",true);
+				FrmAddShoppingCar FASC = new FrmAddShoppingCar(this,"Ñ¡Ôñ¹ºÂòÊıÁ¿",true);
 				FASC.setVisible(true);
 				if(FASC.loadFlag() == 1) {
 					int num = FASC.loadNum();
 					TakeawayUtil.shoppingCarManager.addGoods(this.curGoods,num);
 				}
 			} catch (BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-				
 		} else if(e.getSource() == this.menuItem_delGoods) {
-			
+			if(curShoppingCar == null) {
+				JOptionPane.showMessageDialog(null, "ÇëÑ¡ÔñÉÌÆ·", "´íÎó",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			try {
+				TakeawayUtil.shoppingCarManager.delGoodsFromShoppingCar(curShoppingCar);
+			} catch (BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		} else if(e.getSource() == this.menuItem_settlement) {
+			FrmUserSettlement FU = new FrmUserSettlement(this,"½áËã",true);
+			FU.setVisible(true);
+		} else if(e.getSource() == this.menuItem_addAddress) {
+			FrmUserAddAddress FUAA = new FrmUserAddAddress(this,"Ìí¼ÓµØÖ·",true);
+			FUAA.setVisible(true);
+		} else if(e.getSource() == this.menuItem_BeVip) {
+			try {
+				TakeawayUtil.userManager.BeVip();
+			} catch(BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 		} else if(e.getSource() == this.menuItem_flash) {
 			this.reloadMerchantTable();
 		    this.reloadShoppingCarTable();
 		    this.validate();
 			this.repaint();
 		    this.setVisible(false);
-			this.setVisible(true);
+		    this.setVisible(true);
 		}
 
 	}

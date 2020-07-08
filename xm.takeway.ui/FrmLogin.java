@@ -25,20 +25,20 @@ import xm.takeway.model.BeanUser;
 import xm.takeway.util.BaseException;
 import xm.takeway.util.BusinessException;
 
-public class FrmLogin extends JDialog implements ActionListener  {
+public class FrmLogin extends JDialog implements ActionListener {
 	
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
 	
-	private JButton btnLogin = new JButton("ç™»é™†");
-	private JButton btnCancel = new JButton("é€€å‡º");
-	private JButton btnRegister = new JButton("æ³¨å†Œ");
-	private JRadioButton jradio1 = new JRadioButton("ç”¨æˆ·");
-	private JRadioButton jradio2 = new JRadioButton("å•†å®¶");
+	private JButton btnLogin = new JButton("µÇÂ½");
+	private JButton btnCancel = new JButton("ÍË³ö");
+	private JButton btnRegister = new JButton("×¢²á");
+	private JRadioButton jradio1 = new JRadioButton("ÓÃ»§");
+	private JRadioButton jradio2 = new JRadioButton("ÉÌ¼Ò");
 	
-	private JLabel labelUser = new JLabel("ç”¨æˆ·ï¼š");
-	private JLabel labelPwd = new JLabel("å¯†ç ï¼š");
-	private JLabel labelIDChose = new JLabel("èº«ä»½é€‰æ‹©ï¼š");
+	private JLabel labelUser = new JLabel("ÓÃ»§£º");
+	private JLabel labelPwd = new JLabel("ÃÜÂë£º");
+	private JLabel labelIDChose = new JLabel("Éí·İÑ¡Ôñ£º");
 	private JTextField edtUserName = new JTextField(20);
 	private JPasswordField edtPwd = new JPasswordField(20);
 	
@@ -62,7 +62,7 @@ public class FrmLogin extends JDialog implements ActionListener  {
 		workPane.add(this.jradio2);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		this.setSize(320, 160);
-		// å±å¹•å±…ä¸­æ˜¾ç¤º
+		// ÆÁÄ»¾ÓÖĞÏÔÊ¾
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
@@ -89,7 +89,7 @@ public class FrmLogin extends JDialog implements ActionListener  {
 				try {
 					BeanUser.currentLoginUser = TakeawayUtil.userManager.login(userName, pwd);
 				} catch(BaseException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				this.setVisible(false);
@@ -101,24 +101,25 @@ public class FrmLogin extends JDialog implements ActionListener  {
 				try {
 					BeanMerchant.currentLoginMerchant = TakeawayUtil.merchantManager.login(merchantName, pwd);
 				} catch (BaseException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				this.setVisible(false);
 				FrmMerchantMain FMM = new FrmMerchantMain();
+				FMM.setVisible(true);
 			} else {
-				JOptionPane.showMessageDialog(null, "è¯·é€‰æ‹©ç™»é™†èº«ä»½");
+				JOptionPane.showMessageDialog(null, "ÇëÑ¡ÔñµÇÂ½Éí·İ");
 			}
 			
 		} else if(e.getSource() == this.btnRegister) {
 			if(this.jradio1.isSelected()) {
-				FrmUserReg FUR = new FrmUserReg(this,"æ³¨å†Œ",true);
+				FrmUserReg FUR = new FrmUserReg(this,"×¢²á",true);
 				FUR.setVisible(true);
 			} else if(this.jradio2.isSelected()) {
-				FrmMerchantReg FMR = new FrmMerchantReg(this,"æ³¨å†Œ",true);
+				FrmMerchantReg FMR = new FrmMerchantReg(this,"×¢²á",true);
 				FMR.setVisible(true);	
 			} else {
-				JOptionPane.showMessageDialog(null, "è¯·é€‰æ‹©æ³¨å†Œèº«ä»½");
+				JOptionPane.showMessageDialog(null, "ÇëÑ¡Ôñ×¢²áÉí·İ");
 			}
 		}  else if(e.getSource() == this.btnCancel) {
 			System.exit(0);

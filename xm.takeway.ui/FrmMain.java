@@ -17,8 +17,8 @@ public class FrmMain extends JFrame implements ActionListener {
 	public FrmMain() {
 		
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
-		this.setTitle("澶栧崠鍔╂墜");
-		dlgLogin = new FrmLogin(this,"澶栧崠鍔╂墜鐧婚檰",true);
+		this.setTitle("外卖助手");
+		dlgLogin = new FrmLogin(this,"外卖助手登陆",true);
 		dlgLogin.setVisible(true);
 	}
 

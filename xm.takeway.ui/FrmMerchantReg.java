@@ -23,16 +23,16 @@ import xm.takeway.util.BaseException;
 public class FrmMerchantReg extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
-	private Button btnOk = new Button("æ³¨å†Œ");
-	private Button btnCancel = new Button("å–æ¶ˆ");
+	private Button btnOk = new Button("×¢²á");
+	private Button btnCancel = new Button("È¡Ïû");
 	
-	private JLabel labelUser = new JLabel("å•†å®¶åï¼š");
-	private JLabel labelRank = new JLabel("æ˜Ÿçº§ï¼š   ");
+	private JLabel labelUser = new JLabel("ÉÌ¼ÒÃû£º");
+	private JLabel labelRank = new JLabel("ĞÇ¼¶£º   ");
 	private JLabel labelHollow = new JLabel("                           ");
-	private JLabel labelavgC = new JLabel("äººå‡æ¶ˆè´¹ï¼š");
-	private JLabel labelToS = new JLabel("æ€»é”€é‡ï¼š");
-	private JLabel labelPwd = new JLabel("å¯†ç ï¼š");
-	private JLabel labelPwd2 = new JLabel("ç¡®è®¤å¯†ç ï¼š");
+	private JLabel labelavgC = new JLabel("ÈË¾ùÏû·Ñ£º");
+	private JLabel labelToS = new JLabel("×ÜÏúÁ¿£º");
+	private JLabel labelPwd = new JLabel("ÃÜÂë£º");
+	private JLabel labelPwd2 = new JLabel("È·ÈÏÃÜÂë£º");
 	
 	private JTextField edtUser = new JTextField(19);
 	JComboBox jcb = new JComboBox();
@@ -50,12 +50,12 @@ public class FrmMerchantReg extends JDialog implements ActionListener {
 		workPane.add(labelUser);
 		workPane.add(edtUser);
 		workPane.add(labelRank);
-		jcb.addItem("--è¯·é€‰æ‹©--");
-		jcb.addItem("1æ˜Ÿ");
-		jcb.addItem("2æ˜Ÿ");
-		jcb.addItem("3æ˜Ÿ");
-		jcb.addItem("4æ˜Ÿ");
-		jcb.addItem("5æ˜Ÿ");
+		jcb.addItem("--ÇëÑ¡Ôñ--");
+		jcb.addItem("1ĞÇ");
+		jcb.addItem("2ĞÇ");
+		jcb.addItem("3ĞÇ");
+		jcb.addItem("4ĞÇ");
+		jcb.addItem("5ĞÇ");
 		workPane.add(jcb);
 		workPane.add(labelHollow);
 		workPane.add(labelavgC);
@@ -68,7 +68,7 @@ public class FrmMerchantReg extends JDialog implements ActionListener {
 		workPane.add(edtPwd2);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		this.setSize(310, 250);
-		//å±å¹•å±…ä¸­æ˜¾ç¤º
+		//ÆÁÄ»¾ÓÖĞÏÔÊ¾
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
@@ -90,10 +90,10 @@ public class FrmMerchantReg extends JDialog implements ActionListener {
 				int avg_consume = Integer.parseInt(this.edtavgC.getText());
 				int total_sales = Integer.parseInt(this.edtToS.getText());
 				BeanMerchant merchant = TakeawayUtil.merchantManager.reg(merchantName, merchantRank, avg_consume, total_sales, pwd, pwd2);
-				JOptionPane.showMessageDialog(null, "æ³¨å†ŒæˆåŠŸ");
+				JOptionPane.showMessageDialog(null, "×¢²á³É¹¦");
 				this.setVisible(false);
 			} catch(BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			} catch(NumberFormatException e2) {
 				e2.printStackTrace();

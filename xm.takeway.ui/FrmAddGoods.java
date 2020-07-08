@@ -21,18 +21,20 @@ import xm.takeway.util.BaseException;
 public class FrmAddGoods extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
-	private Button btnOk = new Button("Á°ÆÂÆö");
-	private Button btnCancel = new Button("ÂèñÊ∂à");
+	private Button btnOk = new Button("»∑∂®");
+	private Button btnCancel = new Button("»°œ˚");
 	
-	private JLabel labelKind = new JLabel("ÂïÜÂìÅÁ±ªÂà´Ôºö");
-	private JLabel labelGoodsName = new JLabel("ÂïÜÂìÅÂêçÁß∞Ôºö");
-	private JLabel labelGoodsPrice = new JLabel("ÂïÜÂìÅÂçï‰ª∑Ôºö");
-	private JLabel labelVipPrice = new JLabel("‰ºöÂëòÂçï‰ª∑Ôºö");
+	private JLabel labelKind = new JLabel("…Ã∆∑¿‡±£∫");
+	private JLabel labelGoodsName = new JLabel("…Ã∆∑√˚≥∆£∫");
+	private JLabel labelGoodsPrice = new JLabel("…Ã∆∑µ•º€£∫");
+	private JLabel labelVipPrice = new JLabel("ª·‘±µ•º€£∫");
+	private JLabel labelGoodsNum = new JLabel(" ˝¡ø£∫      ");
 	
 	private JTextField edtKind = new JTextField(18);
 	private JTextField edtGoodsName = new JTextField(18);
 	private JTextField edtGoodsPrice = new JTextField(18);
 	private JTextField edtVipPrice = new JTextField(18);
+	private JTextField edtGoodsNum = new JTextField(18);
 	
 	public FrmAddGoods(JFrame f, String s, boolean b) {
 		super(f,s,b);
@@ -48,9 +50,11 @@ public class FrmAddGoods extends JDialog implements ActionListener {
 		workPane.add(edtGoodsPrice);
 		workPane.add(labelVipPrice);
 		workPane.add(edtVipPrice);
+		workPane.add(labelGoodsNum);
+		workPane.add(edtGoodsNum);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
-		this.setSize(320, 180);
-		// Â±èÂπïÂ±Ö‰∏≠ÊòæÁ§∫
+		this.setSize(320, 220);
+		// ∆¡ƒªæ”÷–œ‘ æ
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
@@ -68,13 +72,14 @@ public class FrmAddGoods extends JDialog implements ActionListener {
 		else if(e.getSource() == this.btnOk){
 			int kind_id = Integer.valueOf(this.edtKind.getText());
 			String goods_name = this.edtGoodsName.getText();
-			int goods_price = Integer.valueOf(this.edtGoodsPrice.getText());
-			int goods_sales = Integer.valueOf(this.edtVipPrice.getText());
+			double goods_price = Double.valueOf(this.edtGoodsPrice.getText());
+			double goods_sales = Double.valueOf(this.edtVipPrice.getText());
+			int goods_num = Integer.valueOf(this.edtGoodsNum.getText());
 			try {
-				TakeawayUtil.goodsManager.addGoods(kind_id, goods_name, goods_price, goods_sales);
+				TakeawayUtil.goodsManager.addGoods(kind_id, goods_name, goods_price, goods_sales,goods_num);
 				this.setVisible(false);
 			} catch (BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "ÈîôËØØ",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "¥ÌŒÛ",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		}

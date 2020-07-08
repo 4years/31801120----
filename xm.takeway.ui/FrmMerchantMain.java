@@ -31,18 +31,18 @@ import xm.takeway.util.BaseException;
 public class FrmMerchantMain extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private JMenuBar menubar = new JMenuBar(); ;
-	private JMenu menu = new JMenu("èœå•");
-//	private JMenu menu_order = new JMenu("æ’åºæ–¹å¼");
-	private JMenu menu_more = new JMenu("æ›´å¤š");
-	//èœå•åˆ—è¡¨
-	private JMenuItem menuItem_addGoods = new JMenuItem("æ·»åŠ å•†å“");
-	private JMenuItem menuItem_delGoods = new JMenuItem("åˆ é™¤å•†å“");
-	//æ’åºåˆ—è¡¨
-//	private JMenuItem menuItem_orderByPrice_Up = new JMenuItem("æŒ‰ä»·æ ¼å‡åº");
-//	private JMenuItem menuItem_orderByPrice_Down = new JMenuItem("æŒ‰ä»·æ ¼é™åº");
-	//æ›´å¤šåˆ—è¡¨
-	private JMenuItem menuItem_modifyPwd = new JMenuItem("ä¿®æ”¹å¯†ç ");
-	private JMenuItem menuItem_flash = new JMenuItem("åˆ·æ–°");
+	private JMenu menu = new JMenu("²Ëµ¥");
+//	private JMenu menu_order = new JMenu("ÅÅĞò·½Ê½");
+	private JMenu menu_more = new JMenu("¸ü¶à");
+	//²Ëµ¥ÁĞ±í
+	private JMenuItem menuItem_addGoods = new JMenuItem("Ìí¼ÓÉÌÆ·");
+	private JMenuItem menuItem_delGoods = new JMenuItem("É¾³ıÉÌÆ·");
+	//ÅÅĞòÁĞ±í
+//	private JMenuItem menuItem_orderByPrice_Up = new JMenuItem("°´¼Û¸ñÉıĞò");
+//	private JMenuItem menuItem_orderByPrice_Down = new JMenuItem("°´¼Û¸ñ½µĞò");
+	//¸ü¶àÁĞ±í
+	private JMenuItem menuItem_modifyPwd = new JMenuItem("ĞŞ¸ÄÃÜÂë");
+	private JMenuItem menuItem_flash = new JMenuItem("Ë¢ĞÂ");
 	
 	private JPanel statusBar = new JPanel();
 	
@@ -58,7 +58,7 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 		try {
 			allGoods = TakeawayUtil.goodsManager.loadAll();
 		} catch (BaseException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		tblGoodsData =  new Object[allGoods.size()][BeanGoodsDetails.tableGoodsTitles.length];
@@ -73,8 +73,8 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 	
 	public FrmMerchantMain(){
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
-		this.setTitle("å¤–å–åŠ©æ‰‹å•†å®¶ç®¡ç†ç³»ç»Ÿ");
-	    //èœå•
+		this.setTitle("ÍâÂôÖúÊÖÉÌ¼Ò¹ÜÀíÏµÍ³");
+	    //²Ëµ¥
 	    this.menu.add(this.menuItem_addGoods); this.menuItem_addGoods.addActionListener(this);
 	    this.menu.add(this.menuItem_delGoods); this.menuItem_delGoods.addActionListener(this);
 	    this.menu_more.add(this.menuItem_modifyPwd); this.menuItem_modifyPwd.addActionListener(this);
@@ -99,9 +99,9 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 	    this.getContentPane().add(new JScrollPane(this.dataTableGoods), BorderLayout.CENTER);
 	    
 	    this.reloadGoodsTable();
-	    //çŠ¶æ€æ 
+	    //×´Ì¬À¸
 	    statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-	    JLabel label=new JLabel("æ‚¨å¥½! " + BeanMerchant.currentLoginMerchant.getMerchant_name());//ä¿®æ”¹æˆ   æ‚¨å¥½ï¼+ç™»é™†ç”¨æˆ·å
+	    JLabel label=new JLabel("ÄúºÃ! " + BeanMerchant.currentLoginMerchant.getMerchant_name());//ĞŞ¸Ä³É   ÄúºÃ£¡+µÇÂ½ÓÃ»§Ãû
 	    statusBar.add(label);
 	    this.getContentPane().add(statusBar,BorderLayout.SOUTH);
 	    this.addWindowListener(new WindowAdapter(){   
@@ -115,21 +115,21 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.menuItem_addGoods) {
-			FrmAddGoods dlg = new FrmAddGoods(this,"æ·»åŠ å•†å“",true);
+			FrmAddGoods dlg = new FrmAddGoods(this,"Ìí¼ÓÉÌÆ·",true);
 			dlg.setVisible(true);
 		} else if(e.getSource() == this.menuItem_delGoods) {
 			if(this.curGoods == null) {
-				JOptionPane.showMessageDialog(null, "è¯·é€‰æ‹©å•†å“", "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "ÇëÑ¡ÔñÉÌÆ·", "´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			try {
 				TakeawayUtil.goodsManager.delGoods(this.curGoods);
 			} catch (BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		} else if(e.getSource() == this.menuItem_modifyPwd) {
-			FrmMerchantModifyPwd FMMP = new FrmMerchantModifyPwd(this,"ä¿®æ”¹å¯†ç ",true);
+			FrmMerchantModifyPwd FMMP = new FrmMerchantModifyPwd(this,"ĞŞ¸ÄÃÜÂë",true);
 			FMMP.setVisible(true);	
 		} else if(e.getSource() == this.menuItem_flash) {
 			this.validate();

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,19 +24,19 @@ import xm.takeway.util.BaseException;
 public class FrmUserReg extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
-	private Button btnOk = new Button("æ³¨å†Œ");
-	private Button btnCancel = new Button("å–æ¶ˆ");
+	private Button btnOk = new Button("×¢²á");
+	private Button btnCancel = new Button("È¡Ïû");
 	
-	private JLabel labelUser = new JLabel("ç”¨æˆ·ï¼š");
-	private JLabel labelSex = new JLabel("æ€§åˆ«ï¼š");
-	private JRadioButton jradio1 = new JRadioButton("ç”·");
-	private JRadioButton jradio2 = new JRadioButton("å¥³");
+	private JLabel labelUser = new JLabel("ÓÃ»§£º");
+	private JLabel labelSex = new JLabel("ĞÔ±ğ£º");
+	private JRadioButton jradio1 = new JRadioButton("ÄĞ");
+	private JRadioButton jradio2 = new JRadioButton("Å®");
 	private JLabel labelHollow = new JLabel("                                      ");
-	private JLabel labelTel = new JLabel("ç”µè¯ï¼š");
-	private JLabel labelEmail = new JLabel("é‚®ç®±ï¼š");
-	private JLabel labelCity = new JLabel("åŸå¸‚ï¼š");
-	private JLabel labelPwd = new JLabel("å¯†ç ï¼š");
-	private JLabel labelPwd2 = new JLabel("ç¡®è®¤å¯†ç ï¼š");
+	private JLabel labelTel = new JLabel("µç»°£º");
+	private JLabel labelEmail = new JLabel("ÓÊÏä£º");
+	private JLabel labelCity = new JLabel("³ÇÊĞ£º");
+	private JLabel labelPwd = new JLabel("ÃÜÂë£º");
+	private JLabel labelPwd2 = new JLabel("È·ÈÏÃÜÂë£º");
 	
 	private JTextField edtUserName = new JTextField(20);
 	private JTextField edtTel = new JTextField(20);
@@ -48,7 +49,7 @@ public class FrmUserReg extends JDialog implements ActionListener {
 		super(f, s, b);
 		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		toolBar.add(this.btnOk);
-		toolBar.add(btnCancel);
+		toolBar.add(this.btnCancel);
 		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
 		workPane.add(labelUser);
 		workPane.add(edtUserName);
@@ -70,7 +71,13 @@ public class FrmUserReg extends JDialog implements ActionListener {
 		workPane.add(labelPwd2);
 		workPane.add(edtPwd2);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
-		this.setSize(310, 250);
+		this.setSize(310, 290);
+		//ÆÁÄ»¾ÓÖĞÏÔÊ¾
+		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		this.setLocation((int) (width - this.getWidth()) / 2,
+			(int) (height - this.getHeight()) / 2);
+		this.validate();
 		this.btnCancel.addActionListener(this);
 		this.btnOk.addActionListener(this);
 	}
@@ -91,11 +98,11 @@ public class FrmUserReg extends JDialog implements ActionListener {
 			String pwd1 = new String(this.edtPwd.getPassword());
 			String pwd2 = new String(this.edtPwd2.getPassword());
 			try {
-				BeanUser user = TakeawayUtil.userManager.reg(username,userSex,userTel,email,userCity,pwd1,pwd2);
-				JOptionPane.showMessageDialog(null, "æ³¨å†ŒæˆåŠŸ");
+				BeanUser BU = TakeawayUtil.userManager.reg(username,userSex,userTel,email,userCity,pwd1,pwd2);
+				JOptionPane.showMessageDialog(null, "×¢²á³É¹¦");
 				this.setVisible(false);
 			} catch (BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			}	
 		}	

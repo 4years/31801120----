@@ -20,18 +20,20 @@ import xm.takeway.util.BaseException;
 public class FrmUserAddAddress extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
-	private Button btnOk = new Button("ç¡®å®š");
-	private Button btnCancel = new Button("å–æ¶ˆ");
+	private Button btnOk = new Button("È·¶¨");
+	private Button btnCancel = new Button("È¡Ïû");
 	
-	private JLabel labelProvince = new JLabel("çœï¼š");
-	private JLabel labelCity = new JLabel("å¸‚ï¼š");
-	private JLabel labelBlock = new JLabel("åŒºï¼š");
-	private JLabel labelAddress = new JLabel("è¯¦ç»†åœ°å€ï¼š");
+	private JLabel labelProvince = new JLabel("Ê¡£º");
+	private JLabel labelCity = new JLabel("ÊĞ£º");
+	private JLabel labelBlock = new JLabel("Çø£º");
+	private JLabel labelAddress = new JLabel("ÏêÏ¸µØÖ·£º");
+	private JLabel labelTel = new JLabel("ÁªÏµ·½Ê½£º");
 	
 	private JTextField edtProvince = new JTextField(21);
 	private JTextField edtCity = new JTextField(21);
 	private JTextField edtBlock = new JTextField(21);
 	private JTextField edtAddress = new JTextField(18);
+	private JTextField edtTel = new JTextField(18);
 	
 	public FrmUserAddAddress(Frame f,String s,Boolean b) {
 		super(f,s,b);
@@ -47,9 +49,11 @@ public class FrmUserAddAddress extends JDialog implements ActionListener {
 		workPane.add(edtBlock);
 		workPane.add(labelAddress);
 		workPane.add(edtAddress);
+		workPane.add(labelTel);
+		workPane.add(edtTel);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		this.setSize(310, 290);
-		//å±å¹•å±…ä¸­æ˜¾ç¤º
+		//ÆÁÄ»¾ÓÖĞÏÔÊ¾
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
@@ -68,12 +72,13 @@ public class FrmUserAddAddress extends JDialog implements ActionListener {
 			String City = this.edtCity.getText();
 			String Block = this.edtBlock.getText();
 			String Address = this.edtAddress.getText();
+			String Tel = this.edtTel.getText();
 			try {
-				TakeawayUtil.userManager.userAddAddress(Province, City, Block, Address);
-				JOptionPane.showMessageDialog(null, "åœ°å€æ·»åŠ æˆåŠŸ");
+				TakeawayUtil.userManager.userAddAddress(Province, City, Block, Address,Tel);
+				JOptionPane.showMessageDialog(null, "µØÖ·Ìí¼Ó³É¹¦");
 				this.setVisible(false);
 			} catch(BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 					

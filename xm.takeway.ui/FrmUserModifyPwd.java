@@ -22,12 +22,12 @@ import xm.takeway.util.BaseException;
 public class FrmUserModifyPwd extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
-	private Button btnOk = new Button("ä¿®æ”¹");
-	private Button btnCancel = new Button("å–æ¶ˆ");
+	private Button btnOk = new Button("ĞŞ¸Ä");
+	private Button btnCancel = new Button("È¡Ïû");
 	
-	private JLabel labelOldPwd = new JLabel("åŸå¯†ç ï¼š");
-	private JLabel labelNewPwd = new JLabel("æ–°å¯†ç ï¼š");
-	private JLabel labelNewPwd2 = new JLabel("ç¡®è®¤å¯†ç ï¼š");
+	private JLabel labelOldPwd = new JLabel("Ô­ÃÜÂë£º");
+	private JLabel labelNewPwd = new JLabel("ĞÂÃÜÂë£º");
+	private JLabel labelNewPwd2 = new JLabel("È·ÈÏÃÜÂë£º");
 	
 	private JTextField edtOldPwd = new JTextField(19);
 	private JPasswordField edtNewPwd = new JPasswordField(19);
@@ -47,7 +47,7 @@ public class FrmUserModifyPwd extends JDialog implements ActionListener {
 		workPane.add(edtNewPwd2);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		this.setSize(310, 180);
-		//å±å¹•å±…ä¸­æ˜¾ç¤º
+		//ÆÁÄ»¾ÓÖĞÏÔÊ¾
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
@@ -59,18 +59,19 @@ public class FrmUserModifyPwd extends JDialog implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == this.btnCancel)
+		if(e.getSource() == this.btnCancel) {
 			this.setVisible(false);
+		}
 		else if(e.getSource() == this.btnOk) {
 			String OldPwd = this.edtOldPwd.getText();
 			String NewPwd = this.edtNewPwd.getText();
 			String NewPwd2 = this.edtNewPwd2.getText();
 			try {
 				TakeawayUtil.userManager.changePwd(BeanUser.currentLoginUser, OldPwd, NewPwd, NewPwd2);
-				JOptionPane.showMessageDialog(null,"ä¿®æ”¹æˆåŠŸ");
+				JOptionPane.showMessageDialog(null,"ĞŞ¸Ä³É¹¦");
 				this.setVisible(false);
 			} catch(BaseException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 		}

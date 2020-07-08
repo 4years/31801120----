@@ -28,10 +28,10 @@ public class FrmAddShoppingCar extends JDialog implements ActionListener {
 	public int flag = 0;
 	private JPanel toolBar = new JPanel();
 	private JPanel workPane = new JPanel();
-	private Button btnOk = new Button("åŠ å…¥è´­ç‰©è½¦");
-	private Button btnCancel = new Button("å–æ¶ˆ");
+	private Button btnOk = new Button("¼ÓÈë¹ºÎï³µ");
+	private Button btnCancel = new Button("È¡Ïû");
 	
-	private JLabel labelNum = new JLabel("è´­ä¹°æ•°é‡");
+	private JLabel labelNum = new JLabel("¹ºÂòÊıÁ¿");
 	private JTextField edtNum = new JTextField(18);
 
 	public FrmAddShoppingCar(Frame f,String s,Boolean b) {
@@ -44,7 +44,7 @@ public class FrmAddShoppingCar extends JDialog implements ActionListener {
 		workPane.add(edtNum);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		this.setSize(320, 150);
-		// å±å¹•å±…ä¸­æ˜¾ç¤º
+		// ÆÁÄ»¾ÓÖĞÏÔÊ¾
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
@@ -58,7 +58,7 @@ public class FrmAddShoppingCar extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.btnOk) {
 			if(this.edtNum.getText() == null || "".equals(this.edtNum.getText())) {
-				JOptionPane.showMessageDialog(null, "è¯·è¾“å…¥æ•°é‡", "é”™è¯¯",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "ÇëÊäÈëÊıÁ¿", "´íÎó",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			flag = 1;
