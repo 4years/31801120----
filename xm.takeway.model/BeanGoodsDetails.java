@@ -1,7 +1,7 @@
 package xm.takeway.model;
 
 public class BeanGoodsDetails {
-	public static final String[] tableGoodsTitles={"åºå·","å•†å“å","æ‰€å±å•†å®¶","å•†å“ç±»åˆ«","å•†å“ä»·æ ¼","ä¼šå‘˜ä»·æ ¼","æ•°é‡"};
+	public static final String[] tableGoodsTitles={"ĞòºÅ","ÉÌÆ·Ãû","ËùÊôÉÌ¼Ò","ÉÌÆ·Àà±ğ","ÉÌÆ·¼Û¸ñ","»áÔ±¼Û¸ñ","ÊıÁ¿"};
 	
 	private int goods_id;
 	private int kind_id;

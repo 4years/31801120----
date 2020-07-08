@@ -2,7 +2,7 @@ package xm.takeway.model;
 
 public class BeanMerchant {
 	public static BeanMerchant currentLoginMerchant = null;
-	public static final String[] tableMerchantTitles = {"åºå·","å•†å®¶å","æ˜Ÿçº§","äººå‡æ¶ˆè´¹","æ€»é”€é‡"};
+	public static final String[] tableMerchantTitles = {"ĞòºÅ","ÉÌ¼ÒÃû","ĞÇ¼¶","ÈË¾ùÏû·Ñ","×ÜÏúÁ¿"};
 	private int merchant_id;
 	private String merchant_name;
 	private String merchant_pwd;

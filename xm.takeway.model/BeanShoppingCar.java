@@ -1,8 +1,8 @@
 package xm.takeway.model;
 
 public class BeanShoppingCar {
-	public static final String[] tableShoppingCar = {"è´­ç‰©è½¦"};
-	public static final String[] tableShoppingCarTitles = {"åºå·","å•†å“å","å•†å®¶å","å•ä»·","æ•°é‡"};
+	public static final String[] tableShoppingCar = {"¹ºÎï³µ"};
+	public static final String[] tableShoppingCarTitles = {"ĞòºÅ","ÉÌÆ·Ãû","ÉÌ¼ÒÃû","µ¥¼Û","ÊıÁ¿"};
 	private int order_id;
 	private String goods_name;
 	private String merchant_name;

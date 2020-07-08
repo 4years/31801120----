@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class BeanUser {
 	public static BeanUser currentLoginUser = null;
+	public static Boolean isVip = false;
 	private int user_id;
 	private String user_name;
 	private String user_sex;
