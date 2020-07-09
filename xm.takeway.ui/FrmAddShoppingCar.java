@@ -43,7 +43,7 @@ public class FrmAddShoppingCar extends JDialog implements ActionListener {
 		workPane.add(labelNum);
 		workPane.add(edtNum);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
-		this.setSize(320, 150);
+		this.setSize(320, 180);
 		// ∆¡ƒªæ”÷–œ‘ æ
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();

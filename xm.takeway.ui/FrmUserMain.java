@@ -65,7 +65,6 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	private Object tblMerchantTitle[] = BeanMerchant.tableMerchantTitles;
 	private Object tblGoodsTitle[] = BeanGoodsDetails.tableGoodsTitles;
 	private Object tblShoppingCarTitle[] = BeanShoppingCar.tableShoppingCarTitles;
-	private Object tblShoppingCar[] = BeanShoppingCar.tableShoppingCar;
 	private Object tblMerchantData[][];
 	private Object tblGoodsData[][];
 	private Object tblShoppingCarData[][];
@@ -87,7 +86,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 		try {
 			allMerchant = TakeawayUtil.merchantManager.loadAll();
 		} catch (BaseException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "¥ÌŒÛ",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(), "¥ÌŒÛ", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		tblMerchantData =  new Object[allMerchant.size()][BeanMerchant.tableMerchantTitles.length];
@@ -277,7 +276,10 @@ public class FrmUserMain extends JFrame implements ActionListener{
 		} else if(e.getSource() == this.menuItem_addAddress) {
 			FrmUserAddAddress FUAA = new FrmUserAddAddress(this,"ÃÌº”µÿ÷∑",true);
 			FUAA.setVisible(true);
-		} else if(e.getSource() == this.menuItem_BeVip) {
+		} else if(e.getSource() == this.menuItem_addressManager) {
+			
+		}
+		else if(e.getSource() == this.menuItem_BeVip) {
 			try {
 				TakeawayUtil.userManager.BeVip();
 			} catch(BaseException e1) {

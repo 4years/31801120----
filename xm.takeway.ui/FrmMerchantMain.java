@@ -37,6 +37,8 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 	//菜单列表
 	private JMenuItem menuItem_addGoods = new JMenuItem("添加商品");
 	private JMenuItem menuItem_delGoods = new JMenuItem("删除商品");
+	private JMenuItem menuItem_addCoupon = new JMenuItem("添加优惠券");
+	private JMenuItem menuItem_showCoupon = new JMenuItem("查看优惠券");
 	//排序列表
 //	private JMenuItem menuItem_orderByPrice_Up = new JMenuItem("按价格升序");
 //	private JMenuItem menuItem_orderByPrice_Down = new JMenuItem("按价格降序");
@@ -74,9 +76,12 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 	public FrmMerchantMain(){
 		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.setTitle("外卖助手商家管理系统");
-	    //菜单
+	    //菜单列表
 	    this.menu.add(this.menuItem_addGoods); this.menuItem_addGoods.addActionListener(this);
 	    this.menu.add(this.menuItem_delGoods); this.menuItem_delGoods.addActionListener(this);
+	    this.menu.add(this.menuItem_addCoupon); this.menuItem_addCoupon.addActionListener(this);
+	    this.menu.add(this.menuItem_showCoupon); this.menuItem_showCoupon.addActionListener(this);
+	    //更多列表
 	    this.menu_more.add(this.menuItem_modifyPwd); this.menuItem_modifyPwd.addActionListener(this);
 	    this.menu_more.add(this.menuItem_flash); this.menuItem_flash.addActionListener(this);
 	    
@@ -128,6 +133,12 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+		} else if(e.getSource() == this.menuItem_addCoupon) {
+			FrmCoupon FC = new FrmCoupon(this,"添加优惠券",true);
+			FC.setVisible(true);
+		} else if(e.getSource() == this.menuItem_showCoupon) {
+			FrmShowCoupon FSC = new FrmShowCoupon(this,"优惠券查看",true);
+			FSC.setVisible(true);
 		} else if(e.getSource() == this.menuItem_modifyPwd) {
 			FrmMerchantModifyPwd FMMP = new FrmMerchantModifyPwd(this,"修改密码",true);
 			FMMP.setVisible(true);	
