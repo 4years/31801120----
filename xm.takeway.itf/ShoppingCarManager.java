@@ -14,5 +14,5 @@ public interface ShoppingCarManager {
 	//删除购物车商品
 	public void delGoodsFromShoppingCar(BeanShoppingCar shoppingCar) throws BaseException;
 	//购物车结算
-	public void settlementShoppingCar() throws BaseException;
+	public void settlementShoppingCar(int address_id) throws BaseException;
 }

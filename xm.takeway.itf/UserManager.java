@@ -1,6 +1,9 @@
 package xm.takeway.itf;
 
+import java.util.List;
+
 import xm.takeway.model.BeanUser;
+import xm.takeway.model.BeanUserAddress;
 import xm.takeway.util.BaseException;
 
 public interface UserManager {
@@ -41,5 +44,6 @@ public interface UserManager {
 	public Boolean isVipDead() throws BaseException;
 	//添加收货地址
 	public void userAddAddress(String Province,String City,String Block,String Address,String Tel) throws BaseException;
-	
+	//加载收货地址
+	public List<BeanUserAddress> loadUserAddress() throws BaseException;
 }

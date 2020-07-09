@@ -16,7 +16,7 @@ public interface MerchantManager {
 	 * @return
 	 * @throws BaseException
 	 */
-	public BeanMerchant reg(String merchantName,String merchantRank,int avg_consume,int total_sales,String pwd,String pwd2) throws BaseException;
+	public BeanMerchant reg(String merchantName,String merchantRank,double avg_consume,int total_sales,String pwd,String pwd2) throws BaseException;
 	/**
 	 * ÉÌ¼ÒµÇÂ½
 	 * @param merchantName
