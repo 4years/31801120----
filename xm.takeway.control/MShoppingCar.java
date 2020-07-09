@@ -168,8 +168,9 @@ public class MShoppingCar implements ShoppingCarManager {
 		}
 	}
 	
-	public void settlementShoppingCar() throws BaseException {
+	public void settlementShoppingCar(int address_id) throws BaseException {
 		List<BeanShoppingCar> result = this.loadAll();
+		System.out.println(address_id);
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -184,6 +185,17 @@ public class MShoppingCar implements ShoppingCarManager {
 				pst.execute();
 				pst.close();
 			}
+			
+			sql = "update merchant_message set total_sales = total_sales + ? where merchant_name = ?";
+			for(i = 0;i < result.size();i++) {
+				java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+				pst.setInt(1, result.get(i).getNum());
+				pst.setString(2, result.get(i).getMerchant_name());
+				pst.execute();
+				pst.close();
+			}
+			
+			
 			
 			sql = "delete from user_shoppingCar where user_name = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);

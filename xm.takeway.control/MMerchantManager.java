@@ -15,8 +15,10 @@ import xm.takeway.util.DBUtil;
 import xm.takeway.util.DbException;
 
 public class MMerchantManager implements MerchantManager {
-	public BeanMerchant reg(String merchantName,String merchantRank,int avg_consume,int total_sales,String pwd,String pwd2) throws BaseException {
+	public BeanMerchant reg(String merchantName,String merchantRank,double avg_consume,int total_sales,String pwd,String pwd2) throws BaseException {
 		Connection conn = null;
+		if(merchantName.equals("root"))
+			throw new BusinessException("商家名不能为root");
 		if("".equals(merchantName) || merchantName == null)
 			throw new BusinessException("商家名不能为空");
 		if("".equals(pwd) || pwd == null || "".equals(pwd2) || pwd2 == null)

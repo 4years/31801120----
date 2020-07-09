@@ -3,11 +3,14 @@ package xm.takeway.control;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import xm.takeway.itf.UserManager;
 import xm.takeway.model.BeanUser;
+import xm.takeway.model.BeanUserAddress;
 import xm.takeway.util.BaseException;
 import xm.takeway.util.BusinessException;
 import xm.takeway.util.DBUtil;
@@ -16,6 +19,8 @@ import xm.takeway.util.DbException;
 public class MUserManager implements UserManager {
 	public BeanUser reg(String username,String usersex,String usertel,String email,String city,String pwd,String pwd2) throws BaseException {
 		Connection conn = null;
+		if(username.equals("root"))
+			throw new BusinessException("用户名不能为root");
 		if(username == null || "".equals(username))
 			throw new BusinessException("用户名不能为空");
 		if(pwd == null || "".equals(pwd) || pwd2 == null || "".equals(pwd2))
@@ -82,7 +87,7 @@ public class MUserManager implements UserManager {
 		try {
 			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false);
-			String sql = "select user_pwd from user_message where user_name = ?";
+			String sql = "select user_pwd,user_tel,user_email,user_city from user_message where user_name = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, username);
 			java.sql.ResultSet rs = pst.executeQuery();
@@ -91,6 +96,9 @@ public class MUserManager implements UserManager {
 					BU = new BeanUser();
 					BU.setUser_name(username);
 					BU.setUser_pwd(pwd);
+					BU.setUser_tel(rs.getString(2));
+					BU.setUser_email(rs.getString(3));
+					BU.setUser_city(rs.getString(4));
 				}
 				else
 					throw new BusinessException("密码错误");
@@ -301,6 +309,45 @@ public class MUserManager implements UserManager {
 		}
 	}
 	
-	
+	public List<BeanUserAddress> loadUserAddress() throws BaseException {
+		List<BeanUserAddress> result = new ArrayList<BeanUserAddress>();
+		BeanUserAddress BUA = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select * from user_address where user_name = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+			java.sql.ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				BUA = new BeanUserAddress();
+				BUA.setAddress_id(rs.getInt(1));
+				BUA.setProvince(rs.getString(2));
+				BUA.setCity(rs.getString(3));
+				BUA.setBlock(rs.getString(4));
+				BUA.setAddress(rs.getString(5));
+				BUA.setUser_name(rs.getString(6));
+				BUA.setUser_tel(rs.getString(7));
+				result.add(BUA);
+			}
+			rs.close();
+			pst.close();
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null) 
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		
+		return result;
+	}
 	
 }
