@@ -1,7 +1,6 @@
 package xm.takeway.model;
 
 public class BeanShoppingCar {
-	public static final String[] tableShoppingCar = {"购物车"};
 	public static final String[] tableShoppingCarTitles = {"序号","商品名","商家名","单价","数量"};
 	private int order_id;
 	private String goods_name;

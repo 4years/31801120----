@@ -1,6 +1,7 @@
 package xm.takeway.model;
 
 public class BeanRoot {
+	public static BeanRoot currentLoginRoot = null;
 	private String root_name;
 	private String root_pwd;
 	
