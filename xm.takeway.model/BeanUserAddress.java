@@ -1,6 +1,7 @@
 package xm.takeway.model;
 
 public class BeanUserAddress {
+	public static final String[] tableAddressTitles = {"序号","省","市","区","详细地址","联系方式"};
 	private int address_id;
 	private String province;
 	private String city;
@@ -8,6 +9,7 @@ public class BeanUserAddress {
 	private String address;
 	private String user_name;
 	private String user_tel;
+	private int order_id;
 	
 	public int getAddress_id() {
 		return address_id;
@@ -50,6 +52,30 @@ public class BeanUserAddress {
 	}
 	public void setUser_tel(String user_tel) {
 		this.user_tel = user_tel;
+	}
+	public int getOrder_id() {
+		return order_id;
+	}
+	public void setOrder_id(int order_id) {
+		this.order_id = order_id;
+	}
+	
+	public String getCell(int col) {
+		if(col == 0)
+			return String.valueOf(this.order_id);
+		else if(col == 1)
+			return this.province;
+		else if(col == 2)
+			return this.city;
+		else if(col == 3)
+			return this.block;
+		else if(col == 4)
+			return this.address;
+		else if(col == 5)
+			return this.user_tel;
+		else
+			return "";
+		
 	}
 	
 	

@@ -1,10 +1,10 @@
 package xm.takeway.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class BeanCoupon {
 	public static final String[] tableMerchantCouponTitles = {"优惠金额","需要集单数","开始生效日期","失效日期","使用范围","发放数量"};
-	public static final String[] tableUserCouponTitles = {"优惠金额","需要集单数","开始生效日期","失效日期","使用范围","未领取数量"};
+	public static final String[] tableUserCouponTitles = {"序号","优惠金额","需要集单数","开始生效日期","失效日期","使用范围","未领取数量"};
 	private double moneyOff_much;
 	private int consume_count;
 	private Date sales_begin_date;
@@ -77,6 +77,13 @@ public class BeanCoupon {
 	public void setRecevied(int recevied) {
 		this.recevied = recevied;
 	}
+	public int getUnrecevied() {
+		return unrecevied;
+	}
+	public void setUnrecevied(int unrecevied) {
+		this.unrecevied = unrecevied;
+	}
+
 	
 	public String getCell(int col) {
 		if(col == 0)
@@ -96,22 +103,23 @@ public class BeanCoupon {
 	}
 	
 	public String UsergetCell(int col) {
-		this.unrecevied = this.coupon_num - this.recevied;
 		if(col == 0)
-			return String.valueOf(this.moneyOff_much);
+			return String.valueOf(this.order_id);
 		else if(col == 1)
-			return String.valueOf(this.consume_count);
+			return String.valueOf(this.moneyOff_much);
 		else if(col == 2)
-			return String.valueOf(this.sales_begin_date);
+			return String.valueOf(this.consume_count);
 		else if(col == 3)
-			return String.valueOf(this.sales_end_date);
+			return String.valueOf(this.sales_begin_date);
 		else if(col == 4)
-			return this.useArea;
+			return String.valueOf(this.sales_end_date);
 		else if(col == 5)
+			return this.useArea;
+		else if(col == 6)
 			return String.valueOf(this.unrecevied);
 		else
 			return "";
 	}
-
+	
 	
 }

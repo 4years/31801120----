@@ -2,7 +2,6 @@ package xm.takeway.model;
 
 public class BeanGoodsDetails {
 	public static final String[] tableGoodsTitles={"序号","商品名","所属商家","商品类别","商品价格","会员价格","数量"};
-	
 	private int goods_id;
 	private int kind_id;
 	private String merchant_Name;

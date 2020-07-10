@@ -6,6 +6,7 @@ public class BeanShoppingCar {
 	private String goods_name;
 	private String merchant_name;
 	private double goods_price;
+	private String user_name;
 	private int num;
 	
 	public int getOrder_id() {
@@ -47,6 +48,13 @@ public class BeanShoppingCar {
 	public void setNum(int num) {
 		this.num = num;
 	}
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
 
 	public String getCell(int col) {
 		if(col == 0)
@@ -62,4 +70,6 @@ public class BeanShoppingCar {
 		else
 			return "";
 	}
+
+	
 }
