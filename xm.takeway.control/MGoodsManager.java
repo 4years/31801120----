@@ -32,7 +32,8 @@ public class MGoodsManager implements GoodsManager {
 				throw new BusinessException("该类别不存在");
 			rs.close();
 			pst.close();
-			sql = "select goods_id from merchant_goodsDetails where goods_name = ?";
+			/*			
+ 			sql = "select goods_id from merchant_goodsDetails where goods_name = ?";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, goods_name);
 			rs = pst.executeQuery();
@@ -40,6 +41,7 @@ public class MGoodsManager implements GoodsManager {
 				throw new BusinessException("同名商品已存在");
 			rs.close();
 			pst.close();
+			*/
 			int order_id;
 			sql = "select count(*) from merchant_goodsDetails where merchant_name = ?";
 			pst = conn.prepareStatement(sql);

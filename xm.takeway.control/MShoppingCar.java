@@ -52,22 +52,43 @@ public class MShoppingCar implements ShoppingCarManager {
 			rs.close();
 			pst.close();
 			if(flag == 0) {
-				sql = "insert into user_shoppingCar(order_id,goods_name,merchant_name,goods_price,num,user_name) values(?,?,?,?,?,?)";
-				pst = conn.prepareStatement(sql);
-				pst.setInt(1, order_id);
-				pst.setString(2, BGD.getGoods_name());
-				pst.setString(3, BGD.getMerchant_Name());
-				pst.setDouble(4, BGD.getGoods_price());
-				pst.setInt(5, num);
-				pst.setString(6, BeanUser.currentLoginUser.getUser_name());
-				pst.execute();
-				pst.close();
-				BSC = new BeanShoppingCar();
-				BSC.setOrder_id(order_id);
-				BSC.setGoods_name(BGD.getGoods_name());
-				BSC.setMerchant_name(BGD.getMerchant_Name());
-				BSC.setGoods_price(BGD.getGoods_price());
-				BSC.setNum(num);	
+				Boolean isVip = BeanUser.isVip;
+				if(isVip) {
+					sql = "insert into user_shoppingCar(order_id,goods_name,merchant_name,goods_price,num,user_name) values(?,?,?,?,?,?)";
+					pst = conn.prepareStatement(sql);
+					pst.setInt(1, order_id);
+					pst.setString(2, BGD.getGoods_name());
+					pst.setString(3, BGD.getMerchant_Name());
+					pst.setDouble(4, BGD.getGoods_sales());
+					pst.setInt(5, num);
+					pst.setString(6, BeanUser.currentLoginUser.getUser_name());
+					pst.execute();
+					pst.close();
+					BSC = new BeanShoppingCar();
+					BSC.setOrder_id(order_id);
+					BSC.setGoods_name(BGD.getGoods_name());
+					BSC.setMerchant_name(BGD.getMerchant_Name());
+					BSC.setGoods_price(BGD.getGoods_price());
+					BSC.setNum(num);	
+				} else {
+					pst.close();
+					sql = "insert into user_shoppingCar(order_id,goods_name,merchant_name,goods_price,num,user_name) values(?,?,?,?,?,?)";
+					pst = conn.prepareStatement(sql);
+					pst.setInt(1, order_id);
+					pst.setString(2, BGD.getGoods_name());
+					pst.setString(3, BGD.getMerchant_Name());
+					pst.setDouble(4, BGD.getGoods_price());
+					pst.setInt(5, num);
+					pst.setString(6, BeanUser.currentLoginUser.getUser_name());
+					pst.execute();
+					pst.close();
+					BSC = new BeanShoppingCar();
+					BSC.setOrder_id(order_id);
+					BSC.setGoods_name(BGD.getGoods_name());
+					BSC.setMerchant_name(BGD.getMerchant_Name());
+					BSC.setGoods_price(BGD.getGoods_price());
+					BSC.setNum(num);	
+				}
 			}
 			else {
 				pst.close();

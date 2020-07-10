@@ -87,7 +87,7 @@ public class MUserManager implements UserManager {
 		try {
 			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false);
-			String sql = "select user_pwd,user_tel,user_email,user_city from user_message where user_name = ?";
+			String sql = "select user_pwd,user_tel,user_email,user_city,user_id,user_vip from user_message where user_name = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, username);
 			java.sql.ResultSet rs = pst.executeQuery();
@@ -99,6 +99,8 @@ public class MUserManager implements UserManager {
 					BU.setUser_tel(rs.getString(2));
 					BU.setUser_email(rs.getString(3));
 					BU.setUser_city(rs.getString(4));
+					BU.setUser_id(rs.getInt(5));
+					BU.setUser_vip(rs.getString(6));
 				}
 				else
 					throw new BusinessException("ÃÜÂë´íÎó");
@@ -284,14 +286,24 @@ public class MUserManager implements UserManager {
 		try {
 			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false);
-			String sql = "insert into user_address(province,city,block,address,user_name,user_tel) values(?,?,?,?,?,?)";
+			String sql = "select count(order_id) from user_address where user_name = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+			java.sql.ResultSet rs = pst.executeQuery();
+			int order_id;
+			if(rs.next())
+				order_id = rs.getInt(1) + 1;
+			else
+				order_id = 1;
+			sql = "insert into user_address(province,city,block,address,user_name,user_tel,order_id) values(?,?,?,?,?,?,?)";
+			pst = conn.prepareStatement(sql);
 			pst.setString(1, Province);
 			pst.setString(2, City);
 			pst.setString(3, Block);
 			pst.setString(4, Address);
 			pst.setString(5, BeanUser.currentLoginUser.getUser_name());
 			pst.setString(6, Tel);
+			pst.setInt(7, order_id);
 			pst.execute();
 			pst.close();
 			conn.commit();
@@ -329,6 +341,7 @@ public class MUserManager implements UserManager {
 				BUA.setAddress(rs.getString(5));
 				BUA.setUser_name(rs.getString(6));
 				BUA.setUser_tel(rs.getString(7));
+				BUA.setOrder_id(rs.getInt(8));
 				result.add(BUA);
 			}
 			rs.close();
@@ -345,9 +358,47 @@ public class MUserManager implements UserManager {
 				} catch(SQLException e) {
 					e.printStackTrace();
 				}
-		}
-		
+		}	
 		return result;
 	}
 	
+	public void delAddress(BeanUserAddress curAddress) throws BaseException {
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "delete from user_address where user_name = ? and order_id = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, curAddress.getUser_name());
+			pst.setInt(2, curAddress.getOrder_id());
+			pst.execute();
+			pst.close();
+			
+			sql = "update user_address set order_id = -order_id where order_id > ? and user_name = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, curAddress.getOrder_id());
+			pst.setString(2, curAddress.getUser_name());
+			pst.execute();
+			pst.close();
+			
+			sql = "update user_address set order_id = -1 - order_id where user_name = ? and order_id < 0";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, curAddress.getUser_name());
+			pst.execute();
+			pst.close();
+			
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null) 
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
 }
