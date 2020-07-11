@@ -9,8 +9,13 @@ import xm.takeway.util.BaseException;
 public interface CouponManager {
 	//添加优惠券
 	public BeanCoupon addCoupon(double moneyOff_much,int consume_count,Date beginDate,Date endDate,int couponNum) throws BaseException;
-	//加载优惠券
+	//商家界面用加载优惠券
 	public List<BeanCoupon> MerchantloadAll() throws BaseException;
 	//删除优惠券
 	public void DelCoupon(BeanCoupon coupon) throws BaseException;
+	//用户界面用加载优惠券
+	public List<BeanCoupon> UserloadAll() throws BaseException;
+	//用户领取优惠券
+	public void UserGetCoupon(BeanCoupon curCoupon) throws BaseException;
+	public int loadGetCouponFlag();
 }

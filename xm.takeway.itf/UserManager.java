@@ -46,4 +46,6 @@ public interface UserManager {
 	public void userAddAddress(String Province,String City,String Block,String Address,String Tel) throws BaseException;
 	//加载收货地址
 	public List<BeanUserAddress> loadUserAddress() throws BaseException;
+	//删除地址
+	public void delAddress(BeanUserAddress curAddress) throws BaseException;
 }
