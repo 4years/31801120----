@@ -52,7 +52,7 @@ public class FrmUserAddAddress extends JDialog implements ActionListener {
 		workPane.add(labelTel);
 		workPane.add(edtTel);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
-		this.setSize(310, 290);
+		this.setSize(310, 230);
 		//∆¡ƒªæ”÷–œ‘ æ
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();

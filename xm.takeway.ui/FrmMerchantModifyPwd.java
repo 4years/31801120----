@@ -65,8 +65,8 @@ public class FrmMerchantModifyPwd extends JDialog implements ActionListener {
 			this.setVisible(false);
 		else if(e.getSource() == this.btnOk){
 			String OldPwd = this.edtOldPwd.getText();
-			String NewPwd = this.edtNewPwd.getText();
-			String NewPwd2 = this.edtNewPwd2.getText();
+			String NewPwd = new String(this.edtNewPwd.getPassword());
+			String NewPwd2 = new String(this.edtNewPwd2.getPassword());
 			try {
 				TakeawayUtil.merchantManager.changpwd(BeanMerchant.currentLoginMerchant, OldPwd, NewPwd, NewPwd2);
 				JOptionPane.showMessageDialog(null,"ÐÞ¸Ä³É¹¦");

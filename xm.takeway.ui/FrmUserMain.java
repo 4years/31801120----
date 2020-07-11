@@ -43,6 +43,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	//菜单列表
 	private JMenuItem menuItem_addGoodsToShoppingCar = new JMenuItem("加入购物车");
 	private JMenuItem menuItem_delGoods = new JMenuItem("删除购物车商品");
+	private JMenuItem menuItem_getCoupon = new JMenuItem("领取优惠券");
 	private JMenuItem menuItem_settlement = new JMenuItem("结算");
 	//排序列表
 	private JMenuItem menuItem_orderByPrice_Up = new JMenuItem("按价格升序");
@@ -141,6 +142,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	    //菜单 监听区
 	    this.menu.add(this.menuItem_addGoodsToShoppingCar); this.menuItem_addGoodsToShoppingCar.addActionListener(this);
 	    this.menu.add(this.menuItem_delGoods); this.menuItem_delGoods.addActionListener(this);
+	    this.menu.add(this.menuItem_getCoupon); this.menuItem_getCoupon.addActionListener(this);
 	    this.menu.add(this.menuItem_settlement); this.menuItem_settlement.addActionListener(this);
 	    //排序 监听区
 	    this.menu_order.add(this.menuItem_orderByPrice_Up); this.menuItem_orderByPrice_Up.addActionListener(this);
@@ -277,15 +279,18 @@ public class FrmUserMain extends JFrame implements ActionListener{
 			FrmUserAddAddress FUAA = new FrmUserAddAddress(this,"添加地址",true);
 			FUAA.setVisible(true);
 		} else if(e.getSource() == this.menuItem_addressManager) {
-			
-		}
-		else if(e.getSource() == this.menuItem_BeVip) {
+			FrmAddressManager FAM = new FrmAddressManager(this,"地址管理",true);
+			FAM.setVisible(true);
+		} else if(e.getSource() == this.menuItem_BeVip) {
 			try {
 				TakeawayUtil.userManager.BeVip();
 			} catch(BaseException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+		} else if(e.getSource() == this.menuItem_getCoupon) {
+			FrmUserGetCoupon FUGC = new FrmUserGetCoupon(this,"领取优惠券",true);
+			FUGC.setVisible(true);
 		} else if(e.getSource() == this.menuItem_flash) {
 			this.reloadMerchantTable();
 		    this.reloadShoppingCarTable();

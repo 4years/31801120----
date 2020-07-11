@@ -135,7 +135,8 @@ public class FrmLogin extends JDialog implements ActionListener {
 					return;
 				}
 				this.setVisible(false);
-				System.out.println(BeanRoot.currentLoginRoot.getRoot_name());
+				FrmRootMain FRM = new FrmRootMain();
+				FRM.setVisible(true);
 			} else {
 				JOptionPane.showMessageDialog(null, "ÇëÑ¡ÔñµÇÂ½Éí·Ý");
 			}

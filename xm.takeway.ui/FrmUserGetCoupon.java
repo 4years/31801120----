@@ -22,12 +22,12 @@ import xm.takeway.TakeawayUtil;
 import xm.takeway.model.BeanCoupon;
 import xm.takeway.util.BaseException;
 
-public class FrmShowCoupon extends JDialog implements ActionListener {
+public class FrmUserGetCoupon extends JDialog implements ActionListener {
 	private JPanel toolBar = new JPanel();
-	private Button btnDel = new Button("删除优惠券");
+	private Button btnOk = new Button("确认领取");
 	private Button btnCancel = new Button("取消");
 	
-	private Object tblCouponTitle[] = BeanCoupon.tableMerchantCouponTitles;
+	private Object tblUserCouponTitle[] = BeanCoupon.tableUserCouponTitles;
 	private Object tblCouponData[][];
 	DefaultTableModel tabCouponModel = new DefaultTableModel();
 	private JTable dataTableCoupon = new JTable(tabCouponModel);
@@ -37,67 +37,65 @@ public class FrmShowCoupon extends JDialog implements ActionListener {
 	
 	public void reloadCouponTable() {
 		try {
-			allCoupon = TakeawayUtil.couponManager.MerchantloadAll();
+			allCoupon = TakeawayUtil.couponManager.UserloadAll();
 		} catch(BaseException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		tblCouponData = new Object[allCoupon.size()][BeanCoupon.tableMerchantCouponTitles.length];
+		tblCouponData = new Object[allCoupon.size()][BeanCoupon.tableUserCouponTitles.length];
 		for(int i = 0;i < allCoupon.size();i++)
-			for(int j = 0;j < BeanCoupon.tableMerchantCouponTitles.length;j++)
-				tblCouponData[i][j] = allCoupon.get(i).getCell(j);
-		tabCouponModel.setDataVector(tblCouponData, tblCouponTitle);
+			for(int j = 0;j < BeanCoupon.tableUserCouponTitles.length;j++)
+				tblCouponData[i][j] = allCoupon.get(i).UsergetCell(j);
+		tabCouponModel.setDataVector(tblCouponData, tblUserCouponTitle);
 		this.dataTableCoupon.invalidate();
 		this.dataTableCoupon.repaint();
 	}
-	public FrmShowCoupon(Frame f,String s,Boolean b) {
+	
+	public FrmUserGetCoupon(Frame f,String s,Boolean b) {
 		super(f,s,b);
 		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		toolBar.add(btnDel);
+		toolBar.add(btnOk);
 		toolBar.add(btnCancel);
 		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
 		this.getContentPane().add(new  JScrollPane(this.dataTableCoupon), BorderLayout.CENTER);
 		this.setSize(570, 220);
 		this.dataTableCoupon.addMouseListener(new MouseAdapter() {
-	    	public void mouseClicked(MouseEvent e) {
-	    		int i = FrmShowCoupon.this.dataTableCoupon.getSelectedRow();
-	    		if(i < 0) {
-	    			return;
-	    		}
-	    		curCoupon = allCoupon.get(i);
-	    	}
-	    });
+			public void mouseClicked(MouseEvent e) {
+				int i = FrmUserGetCoupon.this.dataTableCoupon.getSelectedRow();
+				if(i < 0) {
+					return;
+				}
+				curCoupon = allCoupon.get(i);
+			}
+		});
 		this.reloadCouponTable();
-		// 屏幕居中显示
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		this.setLocation((int) (width - this.getWidth()) / 2,
 				(int) (height - this.getHeight()) / 2);
 		this.validate();
-		btnDel.addActionListener(this);
+		btnOk.addActionListener(this);
 		btnCancel.addActionListener(this);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.btnCancel) {
 			this.setVisible(false);
-		} else if(e.getSource() == this.btnDel) {
+		}
+		else if(e.getSource() == this.btnOk) {
 			if(curCoupon == null) {
 				JOptionPane.showMessageDialog(null, "请选择优惠券", "错误",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			try {
-				TakeawayUtil.couponManager.DelCoupon(curCoupon);
-				JOptionPane.showMessageDialog(null, "删除成功");
+				TakeawayUtil.couponManager.UserGetCoupon(curCoupon);
+				int flag = TakeawayUtil.couponManager.loadGetCouponFlag();
+				if(flag == 0 || flag == 1)
+				JOptionPane.showMessageDialog(null, "领取成功");
 			} catch(BaseException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			this.reloadCouponTable();
-			this.validate();
-			this.repaint();
-		    this.setVisible(false);
-		    this.setVisible(true);
 		}
 	}
 

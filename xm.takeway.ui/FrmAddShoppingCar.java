@@ -66,8 +66,7 @@ public class FrmAddShoppingCar extends JDialog implements ActionListener {
 		} else if(e.getSource() == this.btnCancel) {
 			flag = 2;
 			this.setVisible(false);
-		}
-		
+		}	
 	}
 	
 	public int loadFlag() {
