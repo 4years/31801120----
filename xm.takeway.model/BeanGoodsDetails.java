@@ -1,7 +1,9 @@
 package xm.takeway.model;
 
 public class BeanGoodsDetails {
-	public static final String[] tableGoodsTitles={"序号","商品名","所属商家","商品类别","商品价格","会员价格","数量"};
+	public static final String[] tableUserGoodsTitles = {"序号","商品名","所属商家","商品类别","商品价格","会员价格","数量"};
+	public static final String[] tableMerchantGoodsTitles = {"序号","商品名","商品类别","商品价格","会员价格","数量"};
+	public static final String[] tableRootGoodsTitles = {"序号","商品名","商品价格","会员价格","数量"};
 	private int goods_id;
 	private int kind_id;
 	private String merchant_Name;
@@ -60,7 +62,7 @@ public class BeanGoodsDetails {
 		this.order_id = order_id;
 	}
 	
-	public String getCell(int col) {
+	public String UsergetCell(int col) {
 		if(col == 0)
 			return String.valueOf(this.order_id);
 		else if(col == 1)
@@ -79,6 +81,37 @@ public class BeanGoodsDetails {
 			return "";
 	}
 	
+	public String MerchantgetCell(int col) {
+		if(col == 0)
+			return String.valueOf(this.order_id);
+		else if(col == 1)
+			return this.goods_name;
+		else if(col == 2)	
+			return String.valueOf(this.kind_id);
+		else if(col == 3)
+			return String.valueOf(this.goods_price);
+		else if(col == 4)
+			return String.valueOf(this.goods_sales);
+		else if(col == 5)
+			return String.valueOf(this.goods_num);
+		else
+			return "";
+	}
+	
+	public String RootgetCell(int col) {
+		if(col == 0)
+			return String.valueOf(this.order_id);
+		else if(col == 1)
+			return this.goods_name;
+		else if(col == 2)
+			return String.valueOf(this.goods_price);
+		else if(col == 3)
+			return String.valueOf(this.goods_sales);
+		else if(col == 4)
+			return String.valueOf(this.goods_num);
+		else 
+			return "";
+	}
 
 	
 }
