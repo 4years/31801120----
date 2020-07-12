@@ -3,6 +3,7 @@ package xm.takeway.itf;
 import java.util.List;
 
 import xm.takeway.model.BeanGoodsDetails;
+import xm.takeway.model.BeanGoodsKind;
 import xm.takeway.model.BeanMerchant;
 import xm.takeway.util.BaseException;
 
@@ -15,4 +16,6 @@ public interface GoodsManager {
 	public List<BeanGoodsDetails> loadAll(BeanMerchant merchant) throws BaseException;
 	//删除商品
 	public void delGoods(BeanGoodsDetails goodsdetails) throws BaseException;
+	//按类别加载商品
+	public List<BeanGoodsDetails> loadAll(BeanGoodsKind curGoodsKind) throws BaseException;
 }

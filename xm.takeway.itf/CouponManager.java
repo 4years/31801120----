@@ -18,4 +18,6 @@ public interface CouponManager {
 	//用户领取优惠券
 	public void UserGetCoupon(BeanCoupon curCoupon) throws BaseException;
 	public int loadGetCouponFlag();
+	public void setCouponStatu() throws BaseException;
+	public List<BeanCoupon> UserHoldloadAll() throws BaseException;
 }
