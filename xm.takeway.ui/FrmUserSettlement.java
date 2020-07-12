@@ -39,7 +39,8 @@ public class FrmUserSettlement extends JDialog implements ActionListener {
 	private JLabel labelTotalPrice = new JLabel("◊‹Ω∂Ó£∫ ");
 	private JLabel labelHollow = new JLabel("                                                                    ");
 	private JLabel labelHollow2 = new JLabel("                          ");
-	private JLabel labelAddress = new JLabel(" ’ªıµÿ÷∑£∫");
+	private JLabel labelHollow3 = new JLabel("                 ");
+	private JLabel labelAddress = new JLabel("≈‰ÀÕµÿ÷∑£∫");
 	private JLabel labelCoupon = new JLabel("”≈ª›»Ø£∫");
 	private JLabel labelmoneyOffWay = new JLabel("¬˙ºı∑Ω∞∏£∫");
 	
@@ -97,12 +98,24 @@ public class FrmUserSettlement extends JDialog implements ActionListener {
 		address.addItem("---«Î—°‘Ò---");
 		int i;
 		for(i = 0;i < addressResult.size();i++) {
-			address.addItem(addressResult.get(i).getOrder_id() + " " + addressResult.get(i).getProvince() + addressResult.get(i).getCity() + addressResult.get(i).getBlock() + addressResult.get(i).getAddress() + " " + addressResult.get(i).getUser_tel());
+			address.addItem(addressResult.get(i).getOrder_id() + ". " + addressResult.get(i).getProvince() + addressResult.get(i).getCity() + addressResult.get(i).getBlock() + addressResult.get(i).getAddress() + " " + addressResult.get(i).getUser_tel());
 		}
 		workPane.add(address);
 		
 		workPane.add(labelCoupon);
 		List<BeanCoupon> couponResult = new ArrayList<BeanCoupon>();
+		try {
+			couponResult = TakeawayUtil.couponManager.UserHoldloadAll();
+		} catch(BaseException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "¥ÌŒÛ", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		Coupon.addItem("---«Î—°‘Ò---");
+		for(i = 0;i < couponResult.size();i++) {
+			Coupon.addItem(couponResult.get(i).getOrder_id() + ". " + couponResult.get(i).getMoneyOff_much() + "‘™”≈ª›»Ø (" + couponResult.get(i).getUseArea() + ")");
+		}
+		workPane.add(Coupon);
+		workPane.add(labelHollow3);
 		
 		workPane.add(labelmoneyOffWay);
 		List<BeanMoneyOff> moneyOffResult = new ArrayList<BeanMoneyOff>();
@@ -141,17 +154,56 @@ public class FrmUserSettlement extends JDialog implements ActionListener {
 			try {
 				String str = "";
 				int i = 0;
-				while(String.valueOf(this.address.getSelectedItem()).charAt(i) != ' ') {
-					str = str + String.valueOf(this.address.getSelectedItem()).charAt(i);
-					i++;
+				int address_order_id = 0;
+				if("---«Î—°‘Ò---".equals(this.address.getSelectedItem().toString())) {
+					JOptionPane.showMessageDialog(null, "«Î—°‘Ò≈‰ÀÕµÿ÷∑", "¥ÌŒÛ",JOptionPane.ERROR_MESSAGE);
+					return;
 				}
-				int address_id = 0;
-				try {
-					address_id = Integer.parseInt(str.replaceAll(" ", ""));
-				} catch (NumberFormatException e1) {
-				    e1.printStackTrace();
+				else {
+					while(String.valueOf(this.address.getSelectedItem()).charAt(i) != '.') {
+						str = str + String.valueOf(this.address.getSelectedItem()).charAt(i);
+						i++;
+					}
+					try {
+						address_order_id = Integer.parseInt(str.replaceAll(" ", ""));
+					} catch (NumberFormatException e1) {
+					    e1.printStackTrace();
+					}
 				}
-				TakeawayUtil.shoppingCarManager.settlementShoppingCar(address_id);
+				
+				String str1 = "";
+				i = 0;
+				int coupon_order_id = 0;
+				if("---«Î—°‘Ò---".equals(this.Coupon.getSelectedItem().toString()));
+				else {
+					while(String.valueOf(this.Coupon.getSelectedItem()).charAt(i) != '.') {
+						str1 = str1 + String.valueOf(this.Coupon.getSelectedItem()).charAt(i);
+						i++;
+					}
+					try {
+						coupon_order_id = Integer.parseInt(str1.replace(" ", ""));
+					} catch (NumberFormatException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
+				String str2 = "";
+				i = 0;
+				int moneyOffWay_order_id = 0;
+				if("---«Î—°‘Ò---".equals(this.moneyOffWay.getSelectedItem().toString()));
+				else {
+					while(String.valueOf(this.moneyOffWay.getSelectedItem()).charAt(i) != '.') {
+						str2 = str2 + String.valueOf(this.moneyOffWay.getSelectedItem()).charAt(i);
+						i++;
+					}
+					try {
+						moneyOffWay_order_id = Integer.parseInt(str2.replace(" ", ""));
+					} catch(NumberFormatException e1) {
+						e1.printStackTrace();
+					}
+				}		
+		
+				TakeawayUtil.shoppingCarManager.settlementShoppingCar(address_order_id,coupon_order_id,moneyOffWay_order_id);
 				this.setVisible(false);
 			} catch (BaseException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"¥ÌŒÛ",JOptionPane.ERROR_MESSAGE);

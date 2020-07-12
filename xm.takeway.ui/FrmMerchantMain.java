@@ -35,7 +35,7 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 //	private JMenu menu_order = new JMenu("排序方式");
 	private JMenu menu_more = new JMenu("更多");
 	//菜单列表
-	private JMenuItem menuItem_addGoods = new JMenuItem("添加商品");
+	private JMenuItem menuItem_addGoods = new JMenuItem("进货");
 	private JMenuItem menuItem_delGoods = new JMenuItem("删除商品");
 	private JMenuItem menuItem_addCoupon = new JMenuItem("添加优惠券");
 	private JMenuItem menuItem_showCoupon = new JMenuItem("查看优惠券");
@@ -48,7 +48,7 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 	
 	private JPanel statusBar = new JPanel();
 	
-	private Object tblGoodsTitle[] = BeanGoodsDetails.tableGoodsTitles;
+	private Object tblGoodsTitle[] = BeanGoodsDetails.tableMerchantGoodsTitles;
 	private Object tblGoodsData[][];
 	DefaultTableModel tabGoodsModel = new DefaultTableModel();
 	private JTable dataTableGoods = new JTable(tabGoodsModel);
@@ -63,10 +63,10 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		tblGoodsData =  new Object[allGoods.size()][BeanGoodsDetails.tableGoodsTitles.length];
+		tblGoodsData =  new Object[allGoods.size()][BeanGoodsDetails.tableMerchantGoodsTitles.length];
 		for(int i = 0;i < allGoods.size();i++){
-			for(int j = 0;j < BeanGoodsDetails.tableGoodsTitles.length;j++)
-				tblGoodsData[i][j] = allGoods.get(i).getCell(j);
+			for(int j = 0;j < BeanGoodsDetails.tableMerchantGoodsTitles.length;j++)
+				tblGoodsData[i][j] = allGoods.get(i).MerchantgetCell(j);
 		}
 		tabGoodsModel.setDataVector(tblGoodsData,tblGoodsTitle);
 		this.dataTableGoods.validate();
@@ -120,8 +120,8 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.menuItem_addGoods) {
-			FrmAddGoods dlg = new FrmAddGoods(this,"添加商品",true);
-			dlg.setVisible(true);
+			FrmMerchantAddGoods FMAG = new FrmMerchantAddGoods(this,"进货",true);
+			FMAG.setVisible(true);
 		} else if(e.getSource() == this.menuItem_delGoods) {
 			if(this.curGoods == null) {
 				JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);

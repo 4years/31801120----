@@ -64,7 +64,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	private JPanel statusBar = new JPanel();
 	
 	private Object tblMerchantTitle[] = BeanMerchant.tableMerchantTitles;
-	private Object tblGoodsTitle[] = BeanGoodsDetails.tableGoodsTitles;
+	private Object tblGoodsTitle[] = BeanGoodsDetails.tableUserGoodsTitles;
 	private Object tblShoppingCarTitle[] = BeanShoppingCar.tableShoppingCarTitles;
 	private Object tblMerchantData[][];
 	private Object tblGoodsData[][];
@@ -109,11 +109,10 @@ public class FrmUserMain extends JFrame implements ActionListener{
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		tblGoodsData = new Object[allGoods.size()][BeanGoodsDetails.tableGoodsTitles.length];
-		for(int i = 0;i < allGoods.size();i++) {
-			for(int j = 0;j < BeanGoodsDetails.tableGoodsTitles.length;j++)
-				tblGoodsData[i][j] = allGoods.get(i).getCell(j);
-		}
+		tblGoodsData = new Object[allGoods.size()][BeanGoodsDetails.tableUserGoodsTitles.length];
+		for(int i = 0;i < allGoods.size();i++)
+			for(int j = 0;j < BeanGoodsDetails.tableUserGoodsTitles.length;j++)
+				tblGoodsData[i][j] = allGoods.get(i).UsergetCell(j);
 		tabGoodsModel.setDataVector(tblGoodsData,tblGoodsTitle);
 		this.dataTableGoods.validate();
 		this.dataTableGoods.repaint();
@@ -127,10 +126,9 @@ public class FrmUserMain extends JFrame implements ActionListener{
 			return;
 		}
 		tblShoppingCarData =  new Object[allShoppingCar.size()][BeanShoppingCar.tableShoppingCarTitles.length];
-		for(int i = 0;i < allShoppingCar.size();i++){
+		for(int i = 0;i < allShoppingCar.size();i++)
 			for(int j = 0;j < BeanShoppingCar.tableShoppingCarTitles.length;j++)
 				tblShoppingCarData[i][j] = allShoppingCar.get(i).getCell(j);
-		}
 		tabShoppingCarModel.setDataVector(tblShoppingCarData, tblShoppingCarTitle);
 		this.dataTableShoppingCar.validate();
 		this.dataTableShoppingCar.repaint();
@@ -207,6 +205,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	    statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 	    BeanUser.isVip = false;
 	    try {
+	    	TakeawayUtil.couponManager.setCouponStatu();
 			if(TakeawayUtil.userManager.isVipDead())
 			try {
 				BeanUser.isVip = TakeawayUtil.userManager.isVip();
@@ -281,6 +280,12 @@ public class FrmUserMain extends JFrame implements ActionListener{
 		} else if(e.getSource() == this.menuItem_addressManager) {
 			FrmAddressManager FAM = new FrmAddressManager(this,"地址管理",true);
 			FAM.setVisible(true);
+		} else if(e.getSource() == this.menuItem_nowOrder) {
+		 	FrmShowOrderMessage FSOM = new FrmShowOrderMessage(this,"订单详情",true);
+		 	FSOM.setVisible(true);
+		} else if(e.getSource() == this.menuItem_historyOrder) {
+			FrmHistoryOrder FHO = new FrmHistoryOrder(this,"历史订单",true);
+			FHO.setVisible(true);
 		} else if(e.getSource() == this.menuItem_BeVip) {
 			try {
 				TakeawayUtil.userManager.BeVip();
@@ -299,6 +304,5 @@ public class FrmUserMain extends JFrame implements ActionListener{
 		    this.setVisible(false);
 		    this.setVisible(true);
 		}
-
 	}
 }
