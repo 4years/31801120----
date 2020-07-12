@@ -211,8 +211,18 @@ public class MCouponManager implements CouponManager {
 				throw new BusinessException("该优惠券你已经领取过了");
 			rs.close();
 			pst.close();
+			
+			int order_id = 0;
+			sql = "select count(order_id) from user_moneyOffHold where user_name = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+			rs = pst.executeQuery();
+			if(rs.next())
+				order_id = rs.getInt(1) + 1;
+			else
+				order_id = 1;
 			if(curCoupon.getConsume_count() == 0) {
-				sql = "insert into user_moneyOffHold(user_name,coupon_id,merchant_name,moneyOff_much,number,sales_begin_date,sales_end_date) values(?,?,?,?,?,?,?)";
+				sql = "insert into user_moneyOffHold(user_name,coupon_id,merchant_name,moneyOff_much,number,sales_begin_date,sales_end_date,order_id,UseArea) values(?,?,?,?,?,?,?,?,?)";
 				pst = conn.prepareStatement(sql);
 				pst.setString(1, BeanUser.currentLoginUser.getUser_name());
 				pst.setInt(2, curCoupon.getCoupon_id());
@@ -221,6 +231,8 @@ public class MCouponManager implements CouponManager {
 				pst.setInt(5, 1);
 				pst.setDate(6, curCoupon.getSales_begin_date());
 				pst.setDate(7, curCoupon.getSales_end_date());
+				pst.setInt(8, order_id);
+				pst.setString(9, curCoupon.getUseArea());
 				pst.execute();
 				pst.close();
 				
@@ -250,7 +262,7 @@ public class MCouponManager implements CouponManager {
 				rs.close();
 				pst.close();
 				if(flag == 1) {
-					sql = "insert into user_moneyOffHold(user_name,coupon_id,merchant_name,moneyOff_much,number,sales_begin_date,sales_end_date) values(?,?,?,?,?,?,?)";
+					sql = "insert into user_moneyOffHold(user_name,coupon_id,merchant_name,moneyOff_much,number,sales_begin_date,sales_end_date,order_id,UseArea) values(?,?,?,?,?,?,?,?,?)";
 					pst = conn.prepareStatement(sql);
 					pst.setString(1, BeanUser.currentLoginUser.getUser_name());
 					pst.setInt(2, curCoupon.getCoupon_id());
@@ -259,6 +271,8 @@ public class MCouponManager implements CouponManager {
 					pst.setInt(5, 1);
 					pst.setDate(6, curCoupon.getSales_begin_date());
 					pst.setDate(7, curCoupon.getSales_end_date());
+					pst.setInt(8, order_id);
+					pst.setString(9, curCoupon.getUseArea());
 					pst.execute();
 					pst.close();
 					
@@ -322,9 +336,10 @@ public class MCouponManager implements CouponManager {
 		try {
 			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false);
-			String sql = "select * from user_moneyOffHold where user_name = ?";
+			String sql = "select * from user_moneyOffHold where user_name = ? and statu = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+			pst.setString(2, "可使用");
 			java.sql.ResultSet rs = pst.executeQuery();
 			while(rs.next()) {
 				BC = new BeanCoupon();
@@ -334,6 +349,7 @@ public class MCouponManager implements CouponManager {
 				BC.setSales_begin_date(rs.getDate(6));
 				BC.setSales_end_date(rs.getDate(7));
 				BC.setOrder_id(rs.getInt(8));
+				BC.setUseArea(rs.getString(10));
 				result.add(BC);
 			}
 			conn.commit();
@@ -350,5 +366,43 @@ public class MCouponManager implements CouponManager {
 				}
 		}
 		return result;
+	}
+	
+	public void setCouponStatu() throws BaseException {
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "update user_moneyOffHold set statu = ? where sales_begin_date < now()";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, "未到使用期");
+			pst.execute();
+			pst.close();
+			
+			sql = "update user_moneyOffHold set statu = ? where sales_begin_date <= curdate() and sales_end_date >= curdate()";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, "可使用");
+			pst.execute();
+			pst.close();
+			
+			sql = "update user_moneyOffHold set statu = ? where sales_end_date <= curdate()";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, "已过期");
+			pst.execute();
+			pst.close();
+			
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
 	}
 }

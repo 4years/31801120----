@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xm.takeway.itf.RootManager;
+import xm.takeway.model.BeanGoodsKind;
 import xm.takeway.model.BeanMoneyOff;
 import xm.takeway.model.BeanRoot;
 import xm.takeway.util.BaseException;
@@ -120,4 +121,84 @@ public class MRootManager implements RootManager {
 		}
 		return result;
 	}
+	
+	public void addGoodsKind(String kindName) throws BaseException {
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select count(order_id) from merchant_goodskind";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			java.sql.ResultSet rs = pst.executeQuery();
+			int order_id;
+			if(rs.next())
+				order_id = rs.getInt(1) + 1;
+			else
+				order_id = 1;
+			
+			sql = "select * from merchant_goodskind where kind_name = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, kindName);
+			rs = pst.executeQuery();
+			if(rs.next())
+				throw new BusinessException("该类别已存在");
+			
+			sql = "insert into merchant_goodskind(kind_name,good_num,order_id) values(?,?,?)";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, kindName);
+			pst.setInt(2, 0);
+			pst.setInt(3, order_id);
+			pst.execute();
+			pst.close();
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	
+	public List<BeanGoodsKind> goodsKindloadAll() throws BaseException {
+		List<BeanGoodsKind> result = new ArrayList<BeanGoodsKind>();
+		BeanGoodsKind BGK = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select kind_id,kind_name,good_num,order_id from merchant_goodskind";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			java.sql.ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				BGK = new BeanGoodsKind();
+				BGK.setKind_id(rs.getInt(1));
+				BGK.setKind_name(rs.getString(2));
+				BGK.setGood_num(rs.getInt(3));
+				BGK.setOrder_id(rs.getInt(4));
+				result.add(BGK);
+			}
+			rs.close();
+			pst.close();
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return result;
+	}
+	
 }
