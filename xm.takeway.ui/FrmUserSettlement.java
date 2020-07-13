@@ -60,6 +60,7 @@ public class FrmUserSettlement extends JDialog implements ActionListener {
 			java.sql.ResultSet rs = pst.executeQuery();
 			while(rs.next()) 
 				sum += rs.getDouble(1) * rs.getInt(2);
+			sum = (double)Math.round(sum * 100) / 100;
 			conn.commit();
 		} catch(SQLException e) {
 			e.printStackTrace();

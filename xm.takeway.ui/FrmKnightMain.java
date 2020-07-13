@@ -156,7 +156,7 @@ public class FrmKnightMain  extends JDialog implements ActionListener {
 			}
 			try {
 				TakeawayUtil.knightManager.GetOrder(curOrder);
-				JOptionPane.showConfirmDialog(null, "已接单");
+				JOptionPane.showMessageDialog(null, "已接单");
 			} catch(BaseException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
 				return;
