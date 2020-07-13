@@ -69,6 +69,15 @@ public class FrmHistoryOrder  extends JDialog implements ActionListener {
 			}
 		});
 		this.reloadOrderTable();
+		this.dataTableOrder.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		int i = FrmHistoryOrder.this.dataTableOrder.getSelectedRow();
+	    		if(i < 0) {
+	    			return;
+	    		}
+	    		curOrder = allOrder.get(i);
+	    	}
+	    });
 		// ÆÁÄ»¾ÓÖÐÏÔÊ¾
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -83,7 +92,13 @@ public class FrmHistoryOrder  extends JDialog implements ActionListener {
 		if(e.getSource() == this.btnCancel) {
 			this.setVisible(false);
 		} else if(e.getSource() == this.btnComment) {
-			//ÆÀ¼ÛÏµÍ³ÔÝÎ´Ð´
+			if(curOrder == null) {
+				JOptionPane.showMessageDialog(null, "ÇëÑ¡Ôñ¶©µ¥");
+				return;
+			}
+			FrmOrderComment FOC = new FrmOrderComment(curOrder);
+			this.setVisible(false);
+			FOC.setVisible(true);
 		}
 	}
 

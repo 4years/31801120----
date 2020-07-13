@@ -158,7 +158,7 @@ public class FrmUserMain extends JFrame implements ActionListener{
 	    this.menu_more.add(this.menuItem_flash); this.menuItem_flash.addActionListener(this);
 	    
 	    menubar.add(menu);
-	    menubar.add(menu_order);
+	    //menubar.add(menu_order);
 	    menubar.add(menu_orderDetails);
 	    menubar.add(menu_Address);
 	    menubar.add(menu_more);
