@@ -231,6 +231,17 @@ public class MShoppingCar implements ShoppingCarManager {
 			rs = pst.executeQuery();
 			if(rs.next())
 				address_id = rs.getInt(1);
+			rs.close();
+			pst.close();
+			
+			sql = "select goods_price,num from user_shoppingCar where user_name = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+			rs = pst.executeQuery();
+			while(rs.next())
+				origin_money += rs.getDouble(1) * rs.getInt(2);
+			rs.close();
+			pst.close();
 			
 			//检索使用的优惠券的使用范围，coupon_order_id == 0表示没有使用优惠券
 			int i;
@@ -329,6 +340,7 @@ public class MShoppingCar implements ShoppingCarManager {
 			pst.close();
 			//按商家生成订单
 			for(i = 0;i < merchantResult.size();i++) {
+				origin_money = 0;
 				sql = "select goods_price,num from user_shoppingCar where merchant_name = ?";
 				pst = conn.prepareStatement(sql);
 				pst.setString(1, merchantResult.get(i).getMerchant_name());
@@ -338,6 +350,7 @@ public class MShoppingCar implements ShoppingCarManager {
 				rs.close();
 				pst.close();
 				real_money = 0;
+				
 				if(coupon_order_id != 0 && moneyOffWay_order_id != 0) {
 					if(merchantResult.get(i).getMerchant_name().equals(BC.getAdd_user())) {
 						real_money = origin_money - couponOff - moneyOff_OffMuch;
@@ -550,14 +563,34 @@ public class MShoppingCar implements ShoppingCarManager {
 			}
 			
 			for(i = 0;i < merchantResult.size();i++) {
-				sql = "update user_consumeCount set finished_consume = finished_consume + 1 where merchant_name = ? and user_name = ?";
+				sql = "select finished_consume from user_consumeCount where merchant_name = ? and user_name = ?";
 				pst = conn.prepareStatement(sql);
 				pst.setString(1, merchantResult.get(i).getMerchant_name());
 				pst.setString(2, BeanUser.currentLoginUser.getUser_name());
-				pst.execute();
+				rs = pst.executeQuery();
+				flag = 0;
+				if(rs.next())
+					flag = 1;
+				rs.close();
 				pst.close();
+				if(flag == 1) {
+					sql = "update user_consumeCount set finished_consume = finished_consume + 1 where merchant_name = ? and user_name = ?";
+					pst = conn.prepareStatement(sql);
+					pst.setString(1, merchantResult.get(i).getMerchant_name());
+					pst.setString(2, BeanUser.currentLoginUser.getUser_name());
+					pst.execute();
+					pst.close();
+				} else {
+					pst.close();
+					sql = "insert into user_consumeCount(user_name,merchant_name,finished_consume) values(?,?,?)";
+					pst = conn.prepareStatement(sql);
+					pst.setString(1, BeanUser.currentLoginUser.getUser_name());
+					pst.setString(2, merchantResult.get(i).getMerchant_name());
+					pst.setInt(3, 1);
+					pst.execute();
+					pst.close();
+				}	
 			}
-			
 			conn.commit();
 		} catch(SQLException e) {
 			e.printStackTrace();

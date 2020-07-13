@@ -211,9 +211,10 @@ public class MOrderManager implements OrderManager {
 		try {
 			conn = DBUtil.getConnection();
 			conn.setAutoCommit(false);
-			String sql = "select * from user_order where knight_name = ?";
+			String sql = "select * from user_order where knight_name = ? and order_state != ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, BeanKnight.currentLoginKnight.getKnight_name());
+			pst.setString(2, "已送达");
 			java.sql.ResultSet rs = pst.executeQuery();
 			int count = 0;
 			while(rs.next()) {
@@ -245,9 +246,11 @@ public class MOrderManager implements OrderManager {
 				OrderResult2.add(BKSO);
 			}
 			
-			sql = "select * from user_order where order_state != ?";
+			sql = "select * from user_order where order_state != ? and order_state != ? and knight_name = ?";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, "等待接单");
+			pst.setString(2, "已送达");
+			pst.setString(3, BeanKnight.currentLoginKnight.getKnight_name());
 			rs = pst.executeQuery();
 			for(int i = 0;i < count;i++) {
 				rs.next();

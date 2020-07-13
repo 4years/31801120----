@@ -105,6 +105,9 @@ public class MKnightManager implements KnightManager {
 	}
 	
 	public void GetOrder(BeanOrderMessage curOrder) throws BaseException {
+		System.out.println(curOrder.getOrder_state());
+		if(!("等待接单".equals(curOrder.getOrder_state())))
+			throw new BusinessException("该订单已被接取");
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
