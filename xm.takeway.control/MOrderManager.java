@@ -279,4 +279,50 @@ public class MOrderManager implements OrderManager {
 		}
 		return result;
 	}
+	
+	public void KnightComment(BeanOrderMessage curOrder,String Comment) throws BaseException {
+		if("订单已取消".equals(curOrder.getOrder_state()))
+			throw new BusinessException("该订单已取消");
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select user_comment from knight_income where order_id = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setInt(1, curOrder.getOrder_id());
+			java.sql.ResultSet rs = pst.executeQuery();
+			if(rs.next())
+				if("差评".equals(rs.getString(1)) || "好评".equals(rs.getString(1)))
+					throw new BusinessException("该订单已评价");
+			rs.close();
+			pst.close();
+			
+			double ex_income = 0;
+			if("好评".equals(Comment))
+				ex_income = 0.5;
+			else if("差评".equals(Comment))
+				ex_income = -20;
+			
+			sql = "update knight_income set user_comment = ?,income = income + ? where order_id = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, Comment);
+			pst.setDouble(2, ex_income);
+			pst.setInt(3, curOrder.getOrder_id());
+			pst.execute();
+			pst.close();
+			
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
 }
