@@ -17,6 +17,81 @@ import xm.takeway.util.DBUtil;
 import xm.takeway.util.DbException;
 
 public class MGoodsManager implements GoodsManager {
+	public BeanGoodsDetails addMerchantGoods(int kind_id,BeanGoodsDetails curGoods,int num) throws BaseException {
+		if(num > curGoods.getGoods_num())
+			throw new BusinessException("库存不足");
+		BeanGoodsDetails BGD = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "select goods_num from merchant_goodsDetails where merchant_name = ? and goods_name = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanMerchant.currentLoginMerchant.getMerchant_name());
+			pst.setString(2, curGoods.getGoods_name());
+			java.sql.ResultSet rs = pst.executeQuery();
+			int flag = 0;
+			if(rs.next())
+				flag = 1;
+			rs.close();
+			pst.close();
+			
+			int order_id;
+			sql = "select count(order_id) from merchant_goodsDetails where merchant_name = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, BeanMerchant.currentLoginMerchant.getMerchant_name());
+			rs = pst.executeQuery();
+			if(rs.next())
+				order_id = rs.getInt(1) + 1;
+			else
+				order_id = 1;
+			
+			if(flag == 1) {
+				sql = "update merchant_goodsDetails set goods_num = goods_num + ? where merchant_name = ? and goods_name = ?";
+				pst = conn.prepareStatement(sql);
+				pst.setInt(1, num);
+				pst.setString(2, BeanMerchant.currentLoginMerchant.getMerchant_name());
+				pst.setString(3, curGoods.getGoods_name());
+				pst.execute();
+				pst.close();
+			} else {
+				pst.close();
+				sql = "insert into merchant_goodsDetails(kind_id,merchant_name,goods_name,goods_price,goods_sales,goods_num,order_id) values(?,?,?,?,?,?,?)";
+				pst = conn.prepareStatement(sql);
+				pst.setInt(1, kind_id);
+				pst.setString(2, BeanMerchant.currentLoginMerchant.getMerchant_name());
+				pst.setString(3, curGoods.getGoods_name());
+				pst.setDouble(4, curGoods.getGoods_price());
+				pst.setDouble(5, curGoods.getGoods_sales());
+				pst.setInt(6, num);
+				pst.setInt(7, order_id);
+				pst.execute();
+				pst.close();
+			}
+			
+			sql = "update root_goodsDetails set goods_num = goods_num - ? where goods_name = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, num);
+			pst.setString(2, curGoods.getGoods_name());
+			pst.execute();
+			pst.close();
+			
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return BGD;
+	}
+	
 	public BeanGoodsDetails addGoods(int kind_id,String goods_name,double goods_price,double goods_sales,int goods_num) throws BaseException {
 		Connection conn = null;
 		if(goods_name == null || "".equals(goods_name))
@@ -37,6 +112,13 @@ public class MGoodsManager implements GoodsManager {
 				order_id = 1;
 			rs.close();
 			pst.close();
+			
+			sql = "select goods_id from root_goodsDetails where goods_name = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, goods_name);
+			rs = pst.executeQuery();
+			if(rs.next())
+				throw new BusinessException("该商品已存在");
 			
 			sql = "insert into root_goodsDetails(kind_id,goods_name,goods_price,goods_sales,goods_num,order_id) values(?,?,?,?,?,?)";
 			pst = conn.prepareStatement(sql);

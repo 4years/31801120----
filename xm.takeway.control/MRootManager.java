@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xm.takeway.itf.RootManager;
+import xm.takeway.model.BeanGoodsDetails;
 import xm.takeway.model.BeanGoodsKind;
 import xm.takeway.model.BeanMoneyOff;
 import xm.takeway.model.BeanRoot;
@@ -201,4 +202,108 @@ public class MRootManager implements RootManager {
 		return result;
 	}
 	
+	public void modifyPwd(String Name,String pwd,String pwd2,String identity) throws BaseException {
+		if(!(pwd.equals(pwd2)))
+				throw new BusinessException("两次密码输入不一致");
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "";
+			if("用户".equals(identity)) {
+				sql = "select user_id from user_message where user_name = ?";
+				java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+				pst.setString(1, Name);
+				java.sql.ResultSet rs = pst.executeQuery();
+				if(!rs.next())
+					throw new BusinessException("该用户不存在");
+				rs.close();
+				pst.close();
+				sql = "update user_message set user_pwd = ? where user_name = ?";
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, pwd);
+				pst.setString(2, Name);
+				pst.execute();
+				pst.close();
+			} else if("商家".equals(identity)) {
+				sql = "select merchant_id from merchant_message where merchant_name = ?";
+				java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+				pst.setString(1, Name);
+				java.sql.ResultSet rs = pst.executeQuery();
+				if(!rs.next())
+					throw new BusinessException("该商家不存在");
+				sql = "update merchant_message ser merchant_pwd = ? where merchant_name = ?";
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, pwd);
+				pst.setString(2, Name);
+				pst.execute();
+				pst.close();
+			} else if("骑手".equals(identity)) {
+				sql = "select knight_id from knight_message where knight_name = ?";
+				java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+				pst.setString(1, Name);
+				java.sql.ResultSet rs = pst.executeQuery();
+				if(!rs.next())
+					throw new BusinessException("该骑手不存在");
+				sql = "update knight_message ser knight_pwd = ? where knightt_name = ?";
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, pwd);
+				pst.setString(2, Name);
+				pst.execute();
+				pst.close();
+			}
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	
+	public void delGoods(int kind_id,BeanGoodsDetails curGoods) throws BaseException {
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			conn.setAutoCommit(false);
+			String sql = "delete from root_goodsDetails where kind_id = ? and goods_name = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setInt(1, kind_id);
+			pst.setString(2, curGoods.getGoods_name());
+			pst.execute();
+			pst.close();
+			
+			sql = "update root_goodsDetails set order_id = -order_id where kind_id = ? and order_id > ?";
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, kind_id);
+			pst.setInt(2, curGoods.getOrder_id());
+			pst.execute();
+			pst.close();
+			
+			sql = "update root_goodsDetails set order_id = -1 - order_id where kind_id = ? and order_id < 0";
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, kind_id);
+			pst.execute();
+			pst.close();
+			
+			conn.commit();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e);
+		} finally {
+			if(conn != null)
+				try {
+					conn.rollback();
+					conn.close();
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+		}
+	}
 }
