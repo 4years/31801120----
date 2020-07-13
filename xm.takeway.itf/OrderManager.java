@@ -16,4 +16,6 @@ public interface OrderManager {
 	public List<BeanOrderMessage> KnightloadAll() throws BaseException;
 	//骑手已接到订单显示
 	public List<BeanOrderMessage> KnightGetloadAll() throws BaseException;
+	//用户对骑手评价
+	public void KnightComment(BeanOrderMessage curOrder,String Comment) throws BaseException;
 }
