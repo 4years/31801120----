@@ -18,4 +18,6 @@ public interface GoodsManager {
 	public void delGoods(BeanGoodsDetails goodsdetails) throws BaseException;
 	//按类别加载商品
 	public List<BeanGoodsDetails> loadAll(BeanGoodsKind curGoodsKind) throws BaseException;
+	//商家进货
+	public BeanGoodsDetails addMerchantGoods(int kind_id,BeanGoodsDetails curGoods,int num) throws BaseException;
 }

@@ -12,4 +12,8 @@ public interface OrderManager {
 	public void DelOrder(BeanOrderMessage curOrder) throws BaseException;
 	//加载历史订单
 	public List<BeanOrderMessage> HistoryloadAll() throws BaseException;
+	//骑手接单界面显示
+	public List<BeanOrderMessage> KnightloadAll() throws BaseException;
+	//骑手已接到订单显示
+	public List<BeanOrderMessage> KnightGetloadAll() throws BaseException;
 }

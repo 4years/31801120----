@@ -2,6 +2,7 @@ package xm.takeway.itf;
 
 import java.util.List;
 
+import xm.takeway.model.BeanGoodsDetails;
 import xm.takeway.model.BeanGoodsKind;
 import xm.takeway.model.BeanMoneyOff;
 import xm.takeway.model.BeanRoot;
@@ -18,4 +19,8 @@ public interface RootManager {
 	public void addGoodsKind(String kindName) throws BaseException;
 	//加载商品类别
 	public List<BeanGoodsKind> goodsKindloadAll() throws BaseException;
+	//root修改各类密码
+	public void modifyPwd(String Name,String pwd,String pwd2,String identity) throws BaseException;
+	//root删除商品
+	public void delGoods(int kind_id,BeanGoodsDetails curGoods) throws BaseException;
 }
