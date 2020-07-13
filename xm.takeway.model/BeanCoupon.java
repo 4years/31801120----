@@ -119,7 +119,6 @@ public class BeanCoupon {
 			return String.valueOf(this.unrecevied);
 		else
 			return "";
-	}
-	
+	}	
 	
 }

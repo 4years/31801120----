@@ -71,5 +71,4 @@ public class BeanShoppingCar {
 			return "";
 	}
 
-	
 }

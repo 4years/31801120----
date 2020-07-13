@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class BeanKnight {
 	public static BeanKnight currentLoginKnight = null;
+	private int knight_id;
 	private String knight_name;
 	private String knight_pwd;
 	private Date knight_hiredate;
@@ -32,6 +33,12 @@ public class BeanKnight {
 	}
 	public void setKnight_pwd(String knight_pwd) {
 		this.knight_pwd = knight_pwd;
+	}
+	public int getKnight_id() {
+		return knight_id;
+	}
+	public void setKnight_id(int knight_id) {
+		this.knight_id = knight_id;
 	}
 	
 }
