@@ -85,8 +85,5 @@ public class FrmUserAddAddress extends JDialog implements ActionListener {
 		}
 		
 	}
-	
-	
-
 
 }

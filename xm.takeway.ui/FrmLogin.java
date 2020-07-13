@@ -125,6 +125,8 @@ public class FrmLogin extends JDialog implements ActionListener {
 					return;
 				}
 				this.setVisible(false);
+				FrmKnightMain FKM = new FrmKnightMain();
+				FKM.setVisible(true);
 			} else if(this.jradio4.isSelected()){
 				String rootName = this.edtUserName.getText();
 				String pwd = new String(this.edtPwd.getPassword());

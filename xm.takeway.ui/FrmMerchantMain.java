@@ -120,7 +120,7 @@ public class FrmMerchantMain extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.menuItem_addGoods) {
-			FrmMerchantAddGoods FMAG = new FrmMerchantAddGoods(this,"½ø»õ",true);
+			FrmMerchantAddGoods FMAG = new FrmMerchantAddGoods();
 			FMAG.setVisible(true);
 		} else if(e.getSource() == this.menuItem_delGoods) {
 			if(this.curGoods == null) {

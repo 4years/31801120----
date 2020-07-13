@@ -37,8 +37,12 @@ public class FrmRootMain extends JFrame implements ActionListener{
 	
 	private JMenuItem menuItem_addGoodsKind = new JMenuItem("添加商品类别");
 	private JMenuItem menuItem_addGoods = new JMenuItem("添加商品");
+	private JMenuItem menuItem_delGoods = new JMenuItem("删除商品");
 	private JMenuItem menuItem_moneyOffWay = new JMenuItem("添加满减方案");
 	private JMenuItem menuItem_addCoupon = new JMenuItem("添加优惠券");
+	
+	private JMenuItem menuItem_modifyPwd = new JMenuItem("修改密码");
+	private JMenuItem menuItem_flash = new JMenuItem("刷新");
 	
 	
 	private JPanel statusBar = new JPanel();
@@ -96,8 +100,12 @@ public class FrmRootMain extends JFrame implements ActionListener{
 		this.setTitle("外卖助手管理员系统");
 		this.menu.add(this.menuItem_addGoodsKind); this.menuItem_addGoodsKind.addActionListener(this);
 		this.menu.add(this.menuItem_addGoods); this.menuItem_addGoods.addActionListener(this);
+		this.menu.add(this.menuItem_delGoods); this.menuItem_delGoods.addActionListener(this);
 		this.menu.add(this.menuItem_moneyOffWay); this.menuItem_moneyOffWay.addActionListener(this);
 		this.menu.add(this.menuItem_addCoupon); this.menuItem_addCoupon.addActionListener(this);
+		
+		this.menu_more.add(this.menuItem_modifyPwd); this.menuItem_modifyPwd.addActionListener(this);
+		this.menu_more.add(this.menuItem_flash); this.menuItem_flash.addActionListener(this);
 		
 	    menubar.add(menu);
 	    menubar.add(menu_check);
@@ -113,6 +121,15 @@ public class FrmRootMain extends JFrame implements ActionListener{
 	    			return;
 	    		}
 	    		FrmRootMain.this.reloadGoodsTable(i);
+	    	}
+	    });
+	    this.dataTableGoods.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		int i = FrmRootMain.this.dataTableGoods.getSelectedRow();
+	    		if(i < 0) {
+	    			return;
+	    		}
+	    		curGoods = allGoods.get(i);
 	    	}
 	    });
 	    
@@ -144,12 +161,24 @@ public class FrmRootMain extends JFrame implements ActionListener{
 			} 
 			FrmRootAddGoods FRAG = new FrmRootAddGoods(curGoodsKind);
 			FRAG.setVisible(true);
+		} else if(e.getSource() == this.menuItem_delGoods) {
+			
 		} else if(e.getSource() == this.menuItem_moneyOffWay) {
 			FrmRootAddMoneyOffWay FRAMOW = new FrmRootAddMoneyOffWay(this,"添加满减方案",true);
 			FRAMOW.setVisible(true);
 		} else if(e.getSource() == this.menuItem_addCoupon) {
 			FrmCoupon FC = new FrmCoupon(this,"添加优惠券",true);
 			FC.setVisible(true);
+		} else if(e.getSource() == this.menuItem_modifyPwd) {
+			FrmRootModifyPwd FRMP = new FrmRootModifyPwd(this,"修改密码",true);
+			FRMP.setVisible(true);
+		} else if(e.getSource() == this.menuItem_flash) {
+			this.reloadGoodsKindTable();
+			this.reloadGoodsTable(FrmRootMain.this.dataTableGoodsKind.getSelectedRow());
+			this.validate();
+			this.repaint();
+		    this.setVisible(false);
+		    this.setVisible(true);
 		}
 	}
 		

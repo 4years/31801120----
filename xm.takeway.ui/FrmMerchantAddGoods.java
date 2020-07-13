@@ -76,8 +76,8 @@ public class FrmMerchantAddGoods extends JDialog implements ActionListener {
 		this.dataTableGoods.repaint();
 	}
 	
-	public FrmMerchantAddGoods(Frame f,String s,Boolean b) {
-		super(f,s,b);
+	public FrmMerchantAddGoods() {
+		this.setTitle("进货");
 		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		toolBar.add(this.btnOk);
 		toolBar.add(this.btnCancel);
@@ -123,7 +123,9 @@ public class FrmMerchantAddGoods extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null, "请选择商品");
 				return;
 			}
-			System.out.println(curGoods.getGoods_name());
+			FrmAddGoodsNum FAGN = new FrmAddGoodsNum(curGoodsKind,curGoods);
+			this.setVisible(false);
+			FAGN.setVisible(true);
 		}
 	}
 }
