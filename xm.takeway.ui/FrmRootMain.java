@@ -162,7 +162,16 @@ public class FrmRootMain extends JFrame implements ActionListener{
 			FrmRootAddGoods FRAG = new FrmRootAddGoods(curGoodsKind);
 			FRAG.setVisible(true);
 		} else if(e.getSource() == this.menuItem_delGoods) {
-			
+			if(curGoods == null) {
+				JOptionPane.showMessageDialog(null, "请选择商品");
+				return;
+			}
+			try {
+				TakeawayUtil.rootManager.delGoods(curGoodsKind.getKind_id(),curGoods);
+			} catch(BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 		} else if(e.getSource() == this.menuItem_moneyOffWay) {
 			FrmRootAddMoneyOffWay FRAMOW = new FrmRootAddMoneyOffWay(this,"添加满减方案",true);
 			FRAMOW.setVisible(true);

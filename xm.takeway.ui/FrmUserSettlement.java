@@ -203,7 +203,6 @@ public class FrmUserSettlement extends JDialog implements ActionListener {
 						e1.printStackTrace();
 					}
 				}		
-		
 				TakeawayUtil.shoppingCarManager.settlementShoppingCar(address_order_id,coupon_order_id,moneyOffWay_order_id);
 				this.setVisible(false);
 			} catch (BaseException e1) {
