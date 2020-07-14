@@ -279,6 +279,12 @@ public class MRootManager implements RootManager {
 			pst.execute();
 			pst.close();
 			
+			sql = "update merchant_goodskind set good_num = good_num - 1 where kind_id = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, kind_id);
+			pst.execute();
+			pst.close();
+			
 			sql = "update root_goodsDetails set order_id = -order_id where kind_id = ? and order_id > ?";
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, kind_id);

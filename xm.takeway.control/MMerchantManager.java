@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import xm.takeway.itf.MerchantManager;
 import xm.takeway.model.BeanMerchant;
 import xm.takeway.util.BaseException;
@@ -185,6 +183,5 @@ public class MMerchantManager implements MerchantManager {
 				}
 		}
 		return result;
-	}
-	
+	}	
 }

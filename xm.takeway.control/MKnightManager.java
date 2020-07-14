@@ -1,9 +1,7 @@
 package xm.takeway.control;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 import xm.takeway.itf.KnightManager;
 import xm.takeway.model.BeanKnight;
@@ -105,7 +103,6 @@ public class MKnightManager implements KnightManager {
 	}
 	
 	public void GetOrder(BeanOrderMessage curOrder) throws BaseException {
-		System.out.println(curOrder.getOrder_state());
 		if(!("等待接单".equals(curOrder.getOrder_state())))
 			throw new BusinessException("该订单已被接取");
 		Connection conn = null;
